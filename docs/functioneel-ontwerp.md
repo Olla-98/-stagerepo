@@ -21,7 +21,7 @@ De klant gebruikt het dashboard om inzicht te krijgen in:
 * beschikbare uren;
 * geregistreerde uren;
 * resterende uren;
-* projectvoortgang.
+
 
 De gebruiker krijgt geen eigen toegang tot de Simplicate-omgeving.
 
@@ -114,7 +114,6 @@ Per project worden minimaal de volgende gegevens weergegeven:
 * urenbudget;
 * geregistreerde uren;
 * resterende uren;
-* voortgang.
 
 Het dashboard moet overzichtelijk zijn en geschikt zijn voor desktop en kleinere schermformaten.
 
@@ -127,10 +126,10 @@ Per project wordt de belangrijkste ureninformatie direct weergegeven.
 
 Voorbeeld:
 
-| Project              |  Budget | Geregistreerd | Resterend | Voortgang |
+| Project              |  Budget | Geregistreerd | Resterend |
 
-| Website ontwikkeling | 100 uur |        65 uur |    35 uur |       65% |
-| Webshop              | 200 uur |       120 uur |    80 uur |       60% |
+| Website ontwikkeling | 100 uur |        65 uur |    35 uur |
+| Webshop              | 200 uur |       120 uur |    80 uur |
 
 De exacte gegevens worden vanuit Simplicate opgehaald.
 
@@ -146,7 +145,6 @@ De projectdetailpagina toont minimaal:
 * urenbudget;
 * geregistreerde uren;
 * resterende uren;
-* voortgang.
 
 De projectdetails bevatten alleen informatie die bedoeld is voor de klant.
 
@@ -177,17 +175,6 @@ De basisberekening is:
 
 project1
 Resterende uren = Urenbudget - Geregistreerde uren
-
-
-### Voortgang
-
-De voortgang kan worden weergegeven als percentage:
-
-project2
-Voortgang = Geregistreerde uren / Urenbudget × 100
-
-
-De exacte definitie van projectvoortgang wordt tijdens de implementatie afgestemd met de beschikbare gegevens in Simplicate.
 
 
 ## 12. Simplicate
@@ -263,7 +250,6 @@ Belangrijke uitgangspunten:
 * urenbudget bekijken;
 * geregistreerde uren bekijken;
 * resterende uren bekijken;
-* projectvoortgang bekijken;
 * autorisatie.
 
 ### Functioneel buiten de scope

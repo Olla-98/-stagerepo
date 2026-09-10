@@ -6,7 +6,7 @@ analysis.md
 
 Binnen de organisatie is behoefte aan een eenvoudige en overzichtelijke manier om klanten inzicht te geven in de urenstatus van hun projecten.
 
-De benodigde project- en ureninformatie is beschikbaar binnen Simplicate. Door deze informatie via een klantdashboard beschikbaar te maken, kan de klant op een centrale plek inzicht krijgen in de voortgang van zijn of haar projecten.
+De benodigde project- en ureninformatie is beschikbaar binnen Simplicate. Door deze informatie via een klantdashboard beschikbaar te maken.
 
 ## 2. Probleemstelling
 
@@ -48,7 +48,7 @@ Daarnaast kan het systeem intern worden gebruikt voor ontwikkeling, testen en de
 * Per project wordt het urenbudget weergegeven.
 * Per project worden de geregistreerde uren weergegeven.
 * Per project worden de resterende uren weergegeven.
-* De voortgang van een project wordt weergegeven.
+
 
 ### Projectdetails
 
@@ -81,7 +81,6 @@ Daarnaast kan het systeem intern worden gebruikt voor ontwikkeling, testen en de
 * Urenbudget
 * Geregistreerde uren
 * Resterende uren
-* Projectvoortgang
 * Koppeling met Simplicate
 
 ### Buiten de scope
@@ -113,8 +112,8 @@ Tijdens het project worden de volgende vragen onderzocht:
 
 Op basis van de eerste analyse wordt voorlopig gekeken naar:
 
-* Frontend: React en TypeScript
-* Backend: Python en FastAPI
+* Frontend: Vue / Javascript
+* Backend: Ruby
 * Data-integratie: Simplicate API
 * Authenticatie: nader te bepalen
 

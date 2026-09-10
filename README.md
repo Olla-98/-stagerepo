@@ -14,7 +14,7 @@ De gebruiker moet onder andere kunnen zien:
 * Urenbudget
 * Geregistreerde uren
 * Resterende uren
-* Voortgang van projecten
+
 
 Het dashboard wordt gekoppeld aan Simplicate om project- en ureninformatie op te halen.
 
@@ -26,8 +26,8 @@ De definitieve technologieën worden tijdens de analysefase bepaald.
 
 Voorlopige richting:
 
-* Frontend: React / TypeScript
-* Backend: Python / FastAPI
+* Frontend: Vue
+* Backend: Ruby
 * Data: Simplicate API
 * Authenticatie: wordt tijdens het project bepaald
 

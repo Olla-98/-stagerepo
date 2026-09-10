@@ -88,22 +88,9 @@ wil ik per project mijn urenstatus kunnen bekijken
 * De gegevens worden vanuit Simplicate opgehaald.
 
 
-### US-06 – Projectvoortgang bekijken
-
-**Als klant**
-wil ik de voortgang van mijn project kunnen bekijken
-**zodat** ik snel kan zien hoe ver het project is.
-
-**Acceptatiecriteria:**
-
-* De voortgang wordt als percentage of visuele indicator weergegeven.
-* De berekening is gebaseerd op de beschikbare project- en ureninformatie.
-* De weergegeven informatie is actueel.
-
-
 ## 5. Projectdetails
 
-### US-07 – Projectdetails bekijken
+### US-06 – Projectdetails bekijken
 
 **Als klant**
 wil ik een project kunnen openen
@@ -118,7 +105,7 @@ wil ik een project kunnen openen
 
 ## 6. Beveiliging en autorisatie
 
-### US-08 – Alleen eigen projecten bekijken
+### US-07 – Alleen eigen projecten bekijken
 
 **Als klant**
 wil ik alleen mijn eigen projecten kunnen bekijken
@@ -132,7 +119,7 @@ wil ik alleen mijn eigen projecten kunnen bekijken
 * Het aanpassen van een project-ID geeft geen toegang tot een project van een andere klant.
 
 
-### US-09 – Geen interne informatie tonen
+### US-08 – Geen interne informatie tonen
 
 **Als klant**
 wil ik alleen relevante projectinformatie zien
@@ -149,7 +136,7 @@ wil ik alleen relevante projectinformatie zien
 
 ## 7. Gegevens uit Simplicate
 
-### US-10 – Actuele projectinformatie ophalen
+### US-09 – Actuele projectinformatie ophalen
 
 **Als klant**
 wil ik actuele projectinformatie zien
@@ -164,7 +151,7 @@ wil ik actuele projectinformatie zien
 
 ## 8. Foutafhandeling
 
-### US-11 – Foutmelding bij problemen
+### US-10 – Foutmelding bij problemen
 
 **Als klant**
 wil ik een duidelijke melding krijgen wanneer gegevens niet geladen kunnen worden
@@ -179,7 +166,7 @@ wil ik een duidelijke melding krijgen wanneer gegevens niet geladen kunnen worde
 
 ## 9. Responsive gebruik
 
-### US-12 – Dashboard gebruiken op verschillende schermformaten
+### US-11 – Dashboard gebruiken op verschillende schermformaten
 
 **Als klant**
 wil ik het dashboard op verschillende schermformaten kunnen gebruiken
