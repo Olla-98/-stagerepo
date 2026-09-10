@@ -15,13 +15,13 @@ De voorlopige technische stack bestaat uit:
 
 | Onderdeel                | Technologie                          |
 
-| Frontend                 | React                                |
+| Frontend                 | Vue                                 |
 
 | Programmeertaal frontend | TypeScript                           |
 
-| Backend                  | Node.js                              |
+| Backend                  |  Ruby                                 |
 
-| Backend framework        | Express                              |
+| Backend framework        | Elixir!                             |
 
 | Data-integratie          | Simplicate REST API                  |
 
@@ -45,13 +45,13 @@ De applicatie krijgt globaal de volgende architectuur:
            │
            ▼
 ┌─────────────────────┐
-│ React + TypeScript  │
+│ Vue   + Javascript  │
 │     Frontend        │
 └──────────┬──────────┘
            │ HTTP/JSON
            ▼
 ┌─────────────────────┐
-│ Node.js + Express   │
+│      Ruby.          │
 │      Backend        │
 ├─────────────────────┤
 │Registratie          |
@@ -71,7 +71,7 @@ Wanneer een database nodig is voor gebruikersgegevens, wordt deze gekoppeld aan 
 
 ## 4. Frontend
 
-De frontend wordt ontwikkeld met React en TypeScript.
+De frontend wordt ontwikkeld met Vue en Javascript.
 
 De frontend is verantwoordelijk voor:
 
@@ -92,7 +92,7 @@ API-credentials van Simplicate worden nooit in de frontend opgeslagen.
 
 ## 5. Backend
 
-De backend wordt ontwikkeld met Node.js en Express.
+De backend wordt ontwikkeld met Ruby.
 
 De backend vormt de tussenlaag tussen de frontend en Simplicate.
 
@@ -104,7 +104,7 @@ De backend is verantwoordelijk voor:
 * gebruikerssessies/tokens;
 * ophalen van gegevens uit Simplicate;
 * verwerken van gegevens;
-* berekenen van resterende uren en eventueel voortgang;
+* berekenen van resterende uren;
 * terugsturen van klantgerichte gegevens naar de frontend;
 * afhandelen van fouten.
 
@@ -186,7 +186,7 @@ De gegevensstroom verloopt als volgt:
         ↓
 8. Alleen toegestane gegevens worden naar frontend gestuurd
         ↓
-9. React toont gegevens op het dashboard
+9. Vue toont gegevens op het dashboard
 
 
 
@@ -300,11 +300,6 @@ Bijvoorbeeld:
 
 resterende uren =
 urenbudget - geregistreerde uren
-
-En:
-
-voortgang =
-geregistreerde uren / urenbudget × 100
 
 De backend geeft vervolgens de verwerkte gegevens terug aan de frontend.
 

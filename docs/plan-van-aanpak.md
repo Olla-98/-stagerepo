@@ -28,7 +28,6 @@ De klant moet na het inloggen onder andere kunnen zien:
 * hoeveel uren voor een project beschikbaar zijn;
 * hoeveel uren geregistreerd zijn;
 * hoeveel uren nog beschikbaar zijn;
-* wat de voortgang van het project is.
 
 De applicatie wordt read-only. Klanten kunnen gegevens niet wijzigen of verwijderen.
 
@@ -94,10 +93,9 @@ In het technisch ontwerp wordt bepaald hoe de applicatie technisch wordt opgebou
 
 De voorlopige technische richting bestaat uit:
 
-* React;
-* TypeScript;
-* Node.js;
-* Express;
+* Vue;
+* Javascript;
+* Ruby;
 * Simplicate REST API;
 * een eigen database voor gebruikersgegevens en de koppeling met een Simplicate-organisatie, indien nodig.
 
@@ -227,7 +225,6 @@ De applicatie wordt stap voor stap ontwikkeld en getest. Functionaliteiten worde
 * urenbudget;
 * geregistreerde uren;
 * resterende uren;
-* projectvoortgang;
 * Simplicate API-koppeling;
 * autorisatie.
 
