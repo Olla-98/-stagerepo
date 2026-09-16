@@ -19,9 +19,9 @@ De voorlopige technische stack bestaat uit:
 
 | Programmeertaal frontend | TypeScript                           |
 
-| Backend                  |  Ruby                                 |
+| Backend                  |  Ruby                              |
 
-| Backend framework        | Elixir!                             |
+| Backend framework        | Rails                              |
 
 | Data-integratie          | Simplicate REST API                  |
 
