@@ -21,11 +21,7 @@ De voorlopige technische stack bestaat uit:
 
 | Backend                  |  Ruby                              |
 
-<<<<<<< Updated upstream
-| Backend framework        | Rails                              |
-=======
 | Backend framework        | Ruby on Rails                         |
->>>>>>> Stashed changes
 
 | Data-integratie          | Simplicate REST API                  |
 
