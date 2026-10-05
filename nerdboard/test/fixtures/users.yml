@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  email: MyString
+  email: one@example.com
   password_digest: MyString
-  api_token: MyString
+  api_token: token-one
   simplicate_organization_id: 1
 
 two:
-  email: MyString
+  email: two@example.com
   password_digest: MyString
-  api_token: MyString
+  api_token: token-two
   simplicate_organization_id: 1
