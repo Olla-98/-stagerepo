@@ -3,6 +3,6 @@ import App from './App.vue'
 import './style.css'
 import './auth.css'
 import './dashboard.css'
+import router from './router'
 
-
-createApp(App).mount('#app')
+createApp(App).use(router).mount('#app')

@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
 import type { Project } from '../types'
 
 const props = defineProps<{
   project: Project
-}>()
-
-const emit = defineEmits<{
-  open: []
 }>()
 
 const remaining = computed(() => props.project.budget - props.project.recorded)
@@ -43,8 +40,8 @@ const progress = computed(() =>
       <span :style="{ width: `${progress}%` }"></span>
     </div>
 
-    <button class="text-button" type="button" @click="emit('open')">
+    <RouterLink class="text-button" :to="{ name: 'project', params: { id: project.id } }">
       Bekijk details <span aria-hidden="true">→</span>
-    </button>
+    </RouterLink>
   </article>
 </template>

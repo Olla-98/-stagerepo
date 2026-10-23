@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
 import type { Project } from '../types'
 
 const props = defineProps<{
   project: Project
-}>()
-
-const emit = defineEmits<{
-  back: []
 }>()
 
 const remaining = computed(() => props.project.budget - props.project.recorded)
@@ -18,9 +15,9 @@ const progress = computed(() =>
 
 <template>
   <section class="page-section" aria-labelledby="project-heading">
-    <button class="back-button" type="button" @click="emit('back')">
+    <RouterLink class="back-button" :to="{ name: 'dashboard' }">
       <span aria-hidden="true">←</span> Terug naar dashboard
-    </button>
+    </RouterLink>
 
     <div class="page-heading page-heading--detail">
       <div>

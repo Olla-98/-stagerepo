@@ -118,7 +118,7 @@ function submitForm() {
         </form>
 
         <p class="demo-explanation">
-          Ik maak gebruik van een demo-account om de werking van Nerdboard te laten zien. De gegevens die je invult worden niet opgeslagen en er wordt geen account aangemaakt. Je kunt de demo zo vaak bekijken als je wilt.
+          Dit is een demo-account. Je gegevens worden niet naar een server gestuurd en er wordt geen account aangemaakt. Je demosessie blijft bewaard zolang dit browsertabblad open is.
         </p>
       </section>
 

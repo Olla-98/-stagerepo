@@ -1,6 +1,6 @@
 export type ProjectStatus = 'Actief' | 'On hold' | 'Afgerond'
 
-export type DashboardPage = 'dashboard' | 'project' | 'profile'
+export type DashboardPage = 'dashboard' | 'project'
 
 export interface ProjectPhase {
   name: string

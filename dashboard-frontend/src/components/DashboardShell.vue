@@ -7,7 +7,6 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-  navigate: [page: DashboardPage]
   logout: []
 }>()
 </script>
@@ -15,15 +14,10 @@ const emit = defineEmits<{
 <template>
   <div class="dashboard-layout">
     <header class="topbar">
-      <button
-        class="brand brand-button"
-        type="button"
-        aria-label="Nerdboard dashboard"
-        @click="emit('navigate', 'dashboard')"
-      >
+      <RouterLink class="brand" :to="{ name: 'dashboard' }" aria-label="Nerdboard dashboard">
         <span class="brand-mark" aria-hidden="true">logo</span>
         <span>Nerdboard</span>
-      </button>
+      </RouterLink>
       <div class="topbar__account">
         <span class="topbar__company">Gully B.V.</span>
         <span class="topbar__user">{{ userName }}</span>
@@ -36,36 +30,24 @@ const emit = defineEmits<{
     <div class="dashboard-body">
       <aside class="sidebar">
         <nav class="side-nav" aria-label="Hoofdnavigatie">
-          <button
+          <RouterLink
             class="side-nav__link"
             :class="{ 'side-nav__link--active': activePage === 'dashboard' }"
-            type="button"
             :aria-current="activePage === 'dashboard' ? 'page' : undefined"
-            @click="emit('navigate', 'dashboard')"
+            :to="{ name: 'dashboard' }"
           >
             <span class="side-nav__indicator" aria-hidden="true"></span>
             Dashboard
-          </button>
-          <button
+          </RouterLink>
+          <RouterLink
             class="side-nav__link"
             :class="{ 'side-nav__link--active': activePage === 'project' }"
-            type="button"
             :aria-current="activePage === 'project' ? 'page' : undefined"
-            @click="emit('navigate', 'project')"
+            :to="{ name: 'project', params: { id: 'website' } }"
           >
             <span class="side-nav__indicator" aria-hidden="true"></span>
             Projectdetails
-          </button>
-          <button
-            class="side-nav__link"
-            :class="{ 'side-nav__link--active': activePage === 'profile' }"
-            type="button"
-            :aria-current="activePage === 'profile' ? 'page' : undefined"
-            @click="emit('navigate', 'profile')"
-          >
-            <span class="side-nav__indicator" aria-hidden="true"></span>
-            Profiel
-          </button>
+          </RouterLink>
         </nav>
 
         <div class="sidebar__help">
@@ -75,7 +57,7 @@ const emit = defineEmits<{
       </aside>
 
       <main class="dashboard-main">
-        <slot /> 
+        <slot />
       </main>
     </div>
   </div>

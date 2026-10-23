@@ -7,10 +7,6 @@ const props = defineProps<{
   projects: Project[]
 }>()
 
-const emit = defineEmits<{
-  openProject: [project: Project]
-}>()
-
 const selectedFilter = ref<'Alle projecten' | ProjectStatus>('Alle projecten')
 const filters: Array<'Alle projecten' | ProjectStatus> = [
   'Alle projecten',
@@ -112,7 +108,6 @@ const totalRemaining = computed(() => totalBudget.value - totalRecorded.value)
         v-for="project in filteredProjects"
         :key="project.id"
         :project="project"
-        @open="emit('openProject', project)"
       />
     </div>
     <p v-else class="empty-state">Er zijn geen projecten met deze status.</p>
