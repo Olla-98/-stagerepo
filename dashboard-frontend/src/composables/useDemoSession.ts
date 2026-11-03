@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import type { UserProfile } from './types'
+import type { UserProfile } from '../types'
 
 const userKey = 'nerdboard-demo-user'
 
