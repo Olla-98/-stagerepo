@@ -1,10 +1,9 @@
 import { ref } from 'vue'
+import type { ProjectHours } from '../types'
 
-export interface ProjectSummary {
+export interface ProjectSummary extends ProjectHours {
   id: string
   name: string
-  budget: number
-  recorded: number
   remaining: number
 }
 

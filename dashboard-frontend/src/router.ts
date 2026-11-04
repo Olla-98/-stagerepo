@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import { useAuth } from './composables/useAuth'
-import { projects } from './data/projects'
 import DashboardLayout from './layouts/DashboardLayout.vue'
 import DashboardPage from './views/DashboardPage.vue'
 import LoginPage from './views/LoginPage.vue'
@@ -26,13 +25,6 @@ const routes: RouteRecordRaw[] = [
         path: 'projects/:id',
         name: 'project',
         component: ProjectDetailPage,
-        beforeEnter: (to) => {
-          const projectExists = projects.some((project) => project.id === to.params.id)
-
-          if (!projectExists) {
-            return { name: 'dashboard' }
-          }
-        },
       },
     ],
   },

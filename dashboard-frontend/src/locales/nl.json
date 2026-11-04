@@ -7,22 +7,14 @@
     "logout": "Uitloggen",
     "defaultUser": "Klant"
   },
-  "demo": {
-    "notice": "projecten en uren zijn fictief; dit is geen echte login.",
-    "title": "Voorbeeldweergave",
-    "data": "Voorbeeldgegevens",
-    "explanation": "Dit is een demo-account. Je gegevens worden niet naar een server gestuurd en er wordt geen account aangemaakt. Je demosessie blijft bewaard zolang dit browsertabblad open is."
-  },
   "navigation": {
     "label": "Hoofdnavigatie",
     "dashboard": "Dashboard",
-    "projectDetails": "Projectdetails",
     "helpQuestion": "Vragen over je dashboard?",
     "helpContact": "Neem contact op met info{'@'}nerdsandcompany.nl."
   },
   "hours": {
     "budget": "Budget",
-    "projectBudget": "Urenbudget",
     "recorded": "Geschreven",
     "remaining": "Resterend",
     "unit": "uur",
@@ -31,40 +23,28 @@
     "usedForProject": "Uren gebruikt voor {name}",
     "totalRecorded": "Totaal geregistreerde uren",
     "totalPercentUsed": "{percent}% van het totale urenbudget gebruikt",
-    "projectPercentUsed": "{percent}% van het urenbudget gebruikt"
-  },
-  "status": {
-    "Actief": "Actief",
-    "Afgerond": "Afgerond",
-    "On hold": "On hold"
+    "projectPercentUsed": "{percent}% van het projecturenbudget gebruikt"
   },
   "project": {
-    "updated": "Bijgewerkt {date}",
     "viewDetails": "Bekijk details",
     "backToDashboard": "Terug naar dashboard",
     "eyebrow": "Projectdetails",
     "hoursOverview": "Urenoverzicht",
     "hoursTitle": "Projecturen",
-    "workDistribution": "Werkverdeling",
-    "hoursByPhase": "Uren per fase",
-    "projectInformation": "Projectinformatie",
-    "viewOnly": "Alleen inzicht",
-    "viewOnlyDescription": "De project en ureninformatie is bedoeld om te bekijken. Aanpassingen zijn niet beschikbaar.",
-    "backendNote": "In de uiteindelijke versie worden deze gegevens via de backend uit Simplicate opgehaald.",
-    "hoursUsedFor": "Uren gebruikt voor {name}"
+    "notFound": "Dit project bestaat niet of hoort niet bij jouw organisatie."
   },
   "dashboard": {
-    "eyebrow": "Gully B.V. · projecten",
+    "eyebrow": "Jouw organisatie · projecten",
     "heading": "Altijd een goed begin.",
-    "description": "Bekijk de projectstatus en uren in één overzicht.",
+    "description": "Bekijk de projecten die bij jouw organisatie horen.",
     "hoursOverview": "Urenoverzicht",
     "allProjects": "Alle projecten",
     "projectCount": "geen projecten | {count} project | {count} projecten",
     "projectsHeading": "Projecten",
-    "projectsPrompt": "Kies een project om de uren en details te bekijken.",
-    "filterLabel": "Projecten filteren",
-    "filterAll": "Alle projecten",
-    "emptyState": "Er zijn geen projecten met deze status."
+    "projectsPrompt": "Projecten van jouw organisatie.",
+    "loading": "Projecten laden...",
+    "retry": "Opnieuw proberen",
+    "emptyState": "Er zijn nog geen projecten aan jouw organisatie gekoppeld."
   },
   "login": {
     "introEyebrow": "Jouw projecten, zijn altijd zichtbaar in Nerdboard",
