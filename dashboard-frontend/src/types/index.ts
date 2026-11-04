@@ -5,6 +5,11 @@ export interface ProjectPhase {
   hours: number
 }
 
+export interface ProjectHours {
+  budget: number
+  recorded: number
+}
+
 export interface Project {
   id: string
   name: string
