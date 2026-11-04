@@ -17,6 +17,6 @@ export interface Project {
 }
 
 export interface UserProfile {
-  name: string
+  name: string | null
   email: string
 }
