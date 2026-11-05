@@ -3,6 +3,7 @@ class User < ApplicationRecord
 
     before_validation :generate_api_token, on: :create
 
+    validates :name, presence: true
     validates :email, presence: true, uniqueness: true
     validates :api_token, presence: true, uniqueness: true
 

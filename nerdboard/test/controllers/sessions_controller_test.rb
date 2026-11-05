@@ -3,7 +3,7 @@ require "test_helper"
 class SessionsControllerTest < ActionDispatch::IntegrationTest
   test "logout invalidates the current token" do
     user = users(:one)
-    user.update!(password: "secure-password")
+    user.update!(name: "Test User", password: "secure-password")
     old_token = user.api_token
 
     delete "/logout", headers: { "Authorization" => "Bearer #{old_token}" }
