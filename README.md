@@ -40,3 +40,4 @@ Momenteel bevindt het project zich in de analysefase.
 ## Stageopdracht
 
 Het ontwikkelen van een klantdashboard, gekoppeld met Simplicate via de API of MCP, waarmee klanten real-time inzicht kunnen krijgen in de urenstatus van hun projecten.
+Frontend-prototype gebouwd met AI-hulp en daarna per onderdeel doorgenomen en aangepast. 

@@ -1,0 +1,96 @@
+{
+  "brand": {
+    "dashboardLabel": "Nerdboard dashboard",
+    "name": "Nerdboard"
+  },
+  "account": {
+    "logout": "Uitloggen",
+    "defaultUser": "Klant"
+  },
+  "demo": {
+    "notice": "projecten en uren zijn fictief; dit is geen echte login.",
+    "title": "Voorbeeldweergave",
+    "data": "Voorbeeldgegevens",
+    "explanation": "Dit is een demo-account. Je gegevens worden niet naar een server gestuurd en er wordt geen account aangemaakt. Je demosessie blijft bewaard zolang dit browsertabblad open is."
+  },
+  "navigation": {
+    "label": "Hoofdnavigatie",
+    "dashboard": "Dashboard",
+    "projectDetails": "Projectdetails",
+    "helpQuestion": "Vragen over je dashboard?",
+    "helpContact": "Neem contact op met info{'@'}nerdsandcompany.nl."
+  },
+  "hours": {
+    "budget": "Budget",
+    "projectBudget": "Urenbudget",
+    "recorded": "Geschreven",
+    "remaining": "Resterend",
+    "unit": "uur",
+    "usedFrom": "{recorded} van {budget} uur gebruikt",
+    "remainingShort": "{remaining} uur over",
+    "usedForProject": "Uren gebruikt voor {name}",
+    "totalRecorded": "Totaal geregistreerde uren",
+    "totalPercentUsed": "{percent}% van het totale urenbudget gebruikt",
+    "projectPercentUsed": "{percent}% van het urenbudget gebruikt"
+  },
+  "status": {
+    "Actief": "Actief",
+    "Afgerond": "Afgerond",
+    "On hold": "On hold"
+  },
+  "project": {
+    "updated": "Bijgewerkt {date}",
+    "viewDetails": "Bekijk details",
+    "backToDashboard": "Terug naar dashboard",
+    "eyebrow": "Projectdetails",
+    "hoursOverview": "Urenoverzicht",
+    "hoursTitle": "Projecturen",
+    "workDistribution": "Werkverdeling",
+    "hoursByPhase": "Uren per fase",
+    "projectInformation": "Projectinformatie",
+    "viewOnly": "Alleen inzicht",
+    "viewOnlyDescription": "De project en ureninformatie is bedoeld om te bekijken. Aanpassingen zijn niet beschikbaar.",
+    "backendNote": "In de uiteindelijke versie worden deze gegevens via de backend uit Simplicate opgehaald.",
+    "hoursUsedFor": "Uren gebruikt voor {name}"
+  },
+  "dashboard": {
+    "eyebrow": "Gully B.V. · projecten",
+    "heading": "Altijd een goed begin.",
+    "description": "Bekijk de projectstatus en uren in één overzicht.",
+    "hoursOverview": "Urenoverzicht",
+    "allProjects": "Alle projecten",
+    "projectCount": "geen projecten | {count} project | {count} projecten",
+    "projectsHeading": "Projecten",
+    "projectsPrompt": "Kies een project om de uren en details te bekijken.",
+    "filterLabel": "Projecten filteren",
+    "filterAll": "Alle projecten",
+    "emptyState": "Er zijn geen projecten met deze status."
+  },
+  "login": {
+    "introEyebrow": "Jouw projecten, zijn altijd zichtbaar in Nerdboard",
+    "introHeading": "Ola heeft dit project aangemaakt",
+    "introDescription": "Bekijk op één plek hoe je projecten ervoor staan en hoeveel uren er nog beschikbaar zijn, zonder moeite.",
+    "benefitProjects": "Projectinformatie overzichtelijk bij elkaar. Makkelijk en snel toegankelijk.",
+    "benefitHours": "Inzicht in budget, geschreven en resterende uren. Geen zorgen meer over uren.",
+    "introFoot": "Nerds & Company maakt een helder overzicht voor jouw organisatie.",
+    "eyebrow": "Naar je dashboard",
+    "welcome": "Welkom terug",
+    "createAccount": "Account aanmaken",
+    "loginLead": "Log in om je projecten te bekijken.",
+    "registerLead": "Maak een account aan voor je dashboard.",
+    "chooseMode": "Kies inloggen of registreren",
+    "loginTab": "Inloggen",
+    "registerTab": "Registreren",
+    "name": "Naam",
+    "yourName": "Je naam",
+    "email": "E-mailadres",
+    "emailPlaceholder": "naam{'@'}bedrijf.nl",
+    "password": "Wachtwoord",
+    "passwordPlaceholder": "Je wachtwoord",
+    "missingCredentials": "Vul je e-mailadres en wachtwoord in.",
+    "missingName": "Vul je naam in.",
+    "loginSubmit": "Inloggen en demo bekijken",
+    "registerSubmit": "Registreren en demo bekijken",
+    "contact": "Hulp nodig? Je kan een bericht sturen naar info{'@'}nerdsandcompany.nl."
+  }
+}

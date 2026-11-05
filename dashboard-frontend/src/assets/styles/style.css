@@ -76,12 +76,6 @@ h3 {
   text-decoration: none;
 }
 
-.brand-button {
-  padding: 0;
-  border: 0;
-  background: transparent;
-}
-
 .brand-mark {
   display: grid;
   width: 34px;

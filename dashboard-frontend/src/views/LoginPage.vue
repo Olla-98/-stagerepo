@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { useDemoSession } from '../composables/useDemoSession'
 
-const emit = defineEmits<{
-  openDemo: [email: string, name?: string]
-}>()
-
+const router = useRouter()
+const { t } = useI18n()
+const { startDemoSession } = useDemoSession()
 const mode = ref<'login' | 'register'>('login')
 const name = ref('')
 const email = ref('')
@@ -13,16 +15,17 @@ const message = ref('')
 
 function submitForm() {
   if (!email.value || !password.value) {
-    message.value = 'Vul je e-mailadres en wachtwoord in.'
+    message.value = t('login.missingCredentials')
     return
   }
 
-  if (mode.value === 'register' && !name.value.trim()) { //
-    message.value = 'Vul je naam in.'
+  if (mode.value === 'register' && !name.value.trim()) {
+    message.value = t('login.missingName')
     return
   }
 
-  emit('openDemo', email.value, mode.value === 'register' ? name.value : undefined)
+  startDemoSession(email.value, mode.value === 'register' ? name.value : undefined)
+  router.push({ name: 'dashboard' })
 }
 </script>
 
@@ -31,31 +34,31 @@ function submitForm() {
     <aside class="auth-intro">
       <div class="brand brand--large">
         <span class="brand-mark" aria-hidden="true">Logo</span>
-        <span>Nerdboard</span>
+        <span>{{ $t('brand.name') }}</span>
       </div>
 
       <div class="auth-intro__copy">
-        <p class="eyebrow">Jouw projecten, zijn altijd zichtbaar in Nerdboard</p>
-        <h1>Ola heeft dit project aangemaakt</h1>
-        <p>Bekijk op één plek hoe je projecten ervoor staan en hoeveel uren er nog beschikbaar zijn, zonder moeite.</p>
+        <p class="eyebrow">{{ $t('login.introEyebrow') }}</p>
+        <h1>{{ $t('login.introHeading') }}</h1>
+        <p>{{ $t('login.introDescription') }}</p>
         <ul class="auth-benefits">
-          <li>Projectinformatie overzichtelijk bij elkaar. Makkelijk en snel toegankelijk.</li>
-          <li>Inzicht in budget, geschreven en resterende uren. Geen zorgen meer over uren.</li>
+          <li>{{ $t('login.benefitProjects') }}</li>
+          <li>{{ $t('login.benefitHours') }}</li>
         </ul>
       </div>
 
-      <p class="auth-intro__foot">Nerds & Company maakt een helder overzicht voor jouw organisatie.</p>
+      <p class="auth-intro__foot">{{ $t('login.introFoot') }}</p>
     </aside>
 
     <main class="auth-main">
       <section class="auth-card" aria-labelledby="auth-heading">
-        <p class="eyebrow">Naar je dashboard</p>
-        <h2 id="auth-heading">{{ mode === 'login' ? 'Welkom terug' : 'Account aanmaken' }}</h2>
+        <p class="eyebrow">{{ $t('login.eyebrow') }}</p>
+        <h2 id="auth-heading">{{ mode === 'login' ? $t('login.welcome') : $t('login.createAccount') }}</h2>
         <p class="auth-card__lead">
-          {{ mode === 'login' ? 'Log in om je projecten te bekijken.' : 'Maak een account aan voor je dashboard.' }}
+          {{ mode === 'login' ? $t('login.loginLead') : $t('login.registerLead') }}
         </p>
 
-        <div class="auth-tabs" role="group" aria-label="Kies inloggen of registreren">
+        <div class="auth-tabs" role="group" :aria-label="$t('login.chooseMode')">
           <button
             id="login-tab"
             class="auth-tab"
@@ -64,7 +67,7 @@ function submitForm() {
             :aria-pressed="mode === 'login'"
             @click="mode = 'login'; message = ''"
           >
-            Inloggen
+            {{ $t('login.loginTab') }}
           </button>
           <button
             id="register-tab"
@@ -74,57 +77,54 @@ function submitForm() {
             :aria-pressed="mode === 'register'"
             @click="mode = 'register'; message = ''"
           >
-            Registreren
+            {{ $t('login.registerTab') }}
           </button>
         </div>
 
         <form id="auth-form" class="auth-form" @submit.prevent="submitForm">
-
           <label v-if="mode === 'register'" class="field">
-            <span>Naam</span>
-            <input v-model="name" autocomplete="name" name="name" placeholder="Je naam" required />
+            <span>{{ $t('login.name') }}</span>
+            <input v-model="name" autocomplete="name" name="name" :placeholder="$t('login.yourName')" required />
           </label>
 
           <label class="field">
-            <span>E-mailadres</span>
+            <span>{{ $t('login.email') }}</span>
             <input
               v-model="email"
               autocomplete="email"
               name="email"
               type="email"
-              placeholder="naam@bedrijf.nl"
+              :placeholder="$t('login.emailPlaceholder')"
               required
             />
           </label>
 
           <label class="field">
-            <span>Wachtwoord</span>
+            <span>{{ $t('login.password') }}</span>
             <input
               v-model="password"
               :autocomplete="mode === 'login' ? 'current-password' : 'new-password'"
               name="password"
               type="password"
-              placeholder="Je wachtwoord"
+              :placeholder="$t('login.passwordPlaceholder')"
               required
               minlength="8"
             />
           </label>
 
-          <p v-if="message" class="form-message" role="alert">{{ message }}</p> 
+          <p v-if="message" class="form-message" role="alert">{{ message }}</p>
 
           <button class="button button--primary button--wide" type="submit">
-            {{ mode === 'login' ? 'Inloggen en demo bekijken' : 'Registreren en demo bekijken' }}
+            {{ mode === 'login' ? $t('login.loginSubmit') : $t('login.registerSubmit') }}
           </button>
         </form>
 
-        <p class="demo-explanation">
-          Ik maak gebruik van een demo-account om de werking van Nerdboard te laten zien. De gegevens die je invult worden niet opgeslagen en er wordt geen account aangemaakt. Je kunt de demo zo vaak bekijken als je wilt.
-        </p>
+        <p class="demo-explanation">{{ $t('demo.explanation') }}</p>
       </section>
 
       <footer class="auth-contact">
         <span class="auth-contact__dot" aria-hidden="true"></span>
-        Hulp nodig? Je kan een bericht sturen naar info@nerdsandcompany.nl.
+        {{ $t('login.contact') }}
       </footer>
     </main>
   </div>

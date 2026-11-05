@@ -63,6 +63,8 @@
   color: #6d7087;
   font-size: 14px;
   text-align: left;
+  text-decoration: none;
+  cursor: pointer;
   transition:
     color 150ms ease,
     background-color 150ms ease;
@@ -168,8 +170,7 @@
 .overview-card,
 .project-card,
 .detail-hours-card,
-.detail-panel,
-.profile-card {
+.detail-panel {
   border: 1px solid var(--color-line);
   border-radius: 14px;
   background: #fff;
@@ -430,6 +431,8 @@
   color: var(--color-brand);
   font-size: 12px;
   font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .text-button:hover {
@@ -460,6 +463,8 @@
   color: #676a81;
   font-size: 13px;
   font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .back-button:hover {
@@ -557,80 +562,6 @@
   font-size: 11px;
 }
 
-.profile-card {
-  display: grid;
-  max-width: 650px;
-  gap: 24px;
-  padding: 26px;
-}
-
-.profile-card__identity {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding-bottom: 22px;
-  border-bottom: 1px solid var(--color-line);
-}
-
-.avatar {
-  display: grid;
-  width: 56px;
-  height: 56px;
-  flex: 0 0 56px;
-  place-items: center;
-  border-radius: 50%;
-  background: #eeecff;
-  color: var(--color-brand-dark);
-  font-family: Inter, 'Segoe UI', sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-}
-
-.profile-card__identity h2 {
-  margin-bottom: 0;
-  font-size: 19px;
-}
-
-.profile-fields {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.profile-field {
-  display: grid;
-  gap: 7px;
-  padding: 13px 14px;
-  border: 1px solid #edecf3;
-  border-radius: 9px;
-  background: #fcfcfe;
-}
-
-.profile-field span {
-  color: #85879a;
-  font-size: 11px;
-}
-
-.profile-field strong {
-  overflow-wrap: anywhere;
-  color: #3b3d57;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.profile-card__notice {
-  padding: 13px 15px;
-  border-radius: 9px;
-  background: #f5f4fb;
-  color: #72748a;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.profile-card .button {
-  justify-self: flex-start;
-}
-
 @media (max-width: 900px) {
   .dashboard-body {
     grid-template-columns: 190px minmax(0, 1fr);
@@ -684,7 +615,6 @@
   }
 
   .sidebar {
-    order: 1;
     padding: 8px 12px;
     border-top: 1px solid var(--color-line);
     border-right: 0;
@@ -693,7 +623,7 @@
 
   .side-nav {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 4px;
   }
 
@@ -716,7 +646,6 @@
   }
 
   .dashboard-main {
-    grid-row: 1;
     padding: 23px 16px 30px;
   }
 
@@ -797,8 +726,7 @@
   }
 
   .detail-hours-card,
-  .detail-panel,
-  .profile-card {
+  .detail-panel {
     padding: 18px 15px;
   }
 
@@ -813,8 +741,4 @@
     font-size: 11px;
   }
 
-  .profile-fields {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
 }
