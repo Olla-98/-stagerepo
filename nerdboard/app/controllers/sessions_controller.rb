@@ -3,15 +3,17 @@ class SessionsController < ApplicationController
 
   def create
     user = User.find_by(email: params[:email])
-    if user&.authenticate(params[:password]) 
-      render json: { token: user.api_token }, status: :ok
-    else
+    unless user&.authenticate(params[:password])
       render json: { error: "Ongeldige inloggegevens" }, status: :unauthorized
+      return
     end
+
+    user.issue_api_token!
+    render json: { token: user.api_token }, status: :ok
   end
 
   def destroy
-    @current_user.update!(api_token: SecureRandom.hex(32))
+    current_user.revoke_api_token!
     head :no_content
   end
 end

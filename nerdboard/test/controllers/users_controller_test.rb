@@ -1,7 +1,7 @@
 require "test_helper"
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
-  test "registration creates an account and returns a usable token" do
+  test "registration creates an account and returns a usable expiring token" do
     post "/users", params: {
       user: {
         name: "New Customer",
@@ -17,9 +17,34 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_equal "new-customer@example.com", user.fetch("email")
     assert token.present?
 
-    get "/me", headers: { "Authorization" => "Bearer #{token}" }
+    saved_user = User.find(user.fetch("id"))
+    assert_operator saved_user.api_token_expires_at, :>, Time.current
+
+    get "/me", headers: authorization_headers(token)
 
     assert_response :ok
     assert_equal "New Customer", response.parsed_body.fetch("name")
+  end
+
+  test "registration rejects invalid account data" do
+    post "/users", params: {
+      user: {
+        name: "",
+        email: "not-an-email",
+        password: "short"
+      }
+    }, as: :json
+
+    assert_response :unprocessable_entity
+    errors = response.parsed_body.fetch("errors").join(" ")
+    assert_includes errors, "Name"
+    assert_includes errors, "Email"
+    assert_includes errors, "Password"
+  end
+
+  private
+
+  def authorization_headers(token)
+    { "Authorization" => ActionController::HttpAuthentication::Token.encode_credentials(token) }
   end
 end
