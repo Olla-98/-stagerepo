@@ -12,6 +12,7 @@ class User < ApplicationRecord
       format: { with: URI::MailTo::EMAIL_REGEXP }
     validates :api_token, presence: true, uniqueness: true
     validates :password, length: { minimum: 8 }, allow_nil: true
+    validates :simplicate_organization_id, presence: true
 
     def api_token_valid?
       api_token.present? && api_token_expires_at&.future?

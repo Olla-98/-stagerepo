@@ -7,12 +7,6 @@
     "logout": "Uitloggen",
     "defaultUser": "Klant"
   },
-  "demo": {
-    "notice": "projecten en uren zijn fictief; dit is geen echte login.",
-    "title": "Voorbeeldweergave",
-    "data": "Voorbeeldgegevens",
-    "explanation": "Dit is een demo-account. Je gegevens worden niet naar een server gestuurd en er wordt geen account aangemaakt. Je demosessie blijft bewaard zolang dit browsertabblad open is."
-  },
   "navigation": {
     "label": "Hoofdnavigatie",
     "dashboard": "Dashboard",
@@ -50,13 +44,16 @@
     "projectInformation": "Projectinformatie",
     "viewOnly": "Alleen inzicht",
     "viewOnlyDescription": "De project en ureninformatie is bedoeld om te bekijken. Aanpassingen zijn niet beschikbaar.",
-    "backendNote": "In de uiteindelijke versie worden deze gegevens via de backend uit Simplicate opgehaald.",
+    "backendNote": "Project- en urenbudgetten worden opgehaald uit Simplicate.",
+    "noPhaseBreakdown": "Een uitsplitsing per fase is niet beschikbaar via de Simplicate-projectlijst.",
+    "notFound": "Dit project bestaat niet of hoort niet bij jouw organisatie.",
     "hoursUsedFor": "Uren gebruikt voor {name}"
   },
   "dashboard": {
-    "eyebrow": "Gully B.V. · projecten",
+    "eyebrow": "Projecten · Simplicate",
     "heading": "Altijd een goed begin.",
     "description": "Bekijk de projectstatus en uren in één overzicht.",
+    "dataSource": "Live uit Simplicate",
     "hoursOverview": "Urenoverzicht",
     "allProjects": "Alle projecten",
     "projectCount": "geen projecten | {count} project | {count} projecten",
@@ -64,7 +61,9 @@
     "projectsPrompt": "Kies een project om de uren en details te bekijken.",
     "filterLabel": "Projecten filteren",
     "filterAll": "Alle projecten",
-    "emptyState": "Er zijn geen projecten met deze status."
+    "emptyState": "Er zijn geen projecten met deze status.",
+    "loading": "Projecten laden…",
+    "retry": "Opnieuw proberen"
   },
   "login": {
     "introEyebrow": "Jouw projecten, zijn altijd zichtbaar in Nerdboard",
@@ -94,6 +93,8 @@
     "requestFailed": "Er is iets misgegaan. Probeer het opnieuw.",
     "connectionError": "Kan de server niet bereiken. Controleer of de backend draait en probeer het opnieuw.",
     "logoutError": "Je bent lokaal uitgelogd, maar de server kon het uitloggen niet bevestigen.",
+    "secureConnection": "Je projectgegevens worden veilig via de Nerdboard-backend uit Simplicate opgehaald.",
+    "requestError": "De aanvraag kon niet worden verwerkt.",
     "contact": "Hulp nodig? Je kan een bericht sturen naar info{'@'}nerdsandcompany.nl."
   }
 }

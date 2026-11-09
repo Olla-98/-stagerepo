@@ -1,6 +1,19 @@
 require "test_helper"
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    @original_organization_id = ENV["SIMPLICATE_ORGANIZATION_ID"]
+    ENV["SIMPLICATE_ORGANIZATION_ID"] = "org-42"
+  end
+
+  teardown do
+    if @original_organization_id.nil?
+      ENV.delete("SIMPLICATE_ORGANIZATION_ID")
+    else
+      ENV["SIMPLICATE_ORGANIZATION_ID"] = @original_organization_id
+    end
+  end
+
   test "registration creates an account and returns a usable expiring token" do
     post "/users", params: {
       user: {

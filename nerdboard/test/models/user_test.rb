@@ -5,7 +5,8 @@ class UserTest < ActiveSupport::TestCase
     {
       name: "Test User",
       email: "new-user@example.com",
-      password: "secure-password"
+      password: "secure-password",
+      simplicate_organization_id: "org-42"
     }
   end
 

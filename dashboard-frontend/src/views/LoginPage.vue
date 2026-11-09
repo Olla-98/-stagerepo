@@ -96,7 +96,7 @@ async function submitForm() {
           </button>
         </div>
 
-        <form id="auth-form" class="auth-form" @submit.prevent="submitForm">
+        <form id="auth-form" class="auth-form" :aria-busy="submitting" @submit.prevent="submitForm">
           <label v-if="mode === 'register'" class="field">
             <span>{{ $t('login.name') }}</span>
             <input v-model="name" autocomplete="name" name="name" :placeholder="$t('login.yourName')" required />
@@ -140,6 +140,7 @@ async function submitForm() {
         <p v-else-if="route.query.error === 'logout'" class="form-message" role="alert">
           {{ $t('login.logoutError') }}
         </p>
+        <p class="demo-explanation">{{ $t('login.secureConnection') }}</p>
       </section>
 
       <footer class="auth-contact">

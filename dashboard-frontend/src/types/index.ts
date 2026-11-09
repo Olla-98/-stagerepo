@@ -17,6 +17,8 @@ export interface Project {
 }
 
 export interface UserProfile {
+  id: number
   name: string | null
   email: string
+  simplicate_organization_id?: string | number | null
 }

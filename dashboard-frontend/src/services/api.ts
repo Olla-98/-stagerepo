@@ -12,7 +12,7 @@ export class ApiError extends Error {
 }
 
 interface ApiRequestOptions extends RequestInit {
-  token?: string
+  token?: string | null
 }
 
 export async function apiRequest<T>(
