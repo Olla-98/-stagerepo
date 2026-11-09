@@ -21,7 +21,7 @@ interface ApiErrorResponse {
 }
 
 interface ApiRequestOptions extends RequestInit {
-  token?: string
+  token?: string | null
 }
 
 export async function apiRequest<T>(

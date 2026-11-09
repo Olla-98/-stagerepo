@@ -1,18 +1,32 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
+import { useRoute, RouterLink } from 'vue-router'
 import HoursSummary from '../components/HoursSummary.vue'
-import { useProjectHours } from '../composables/useProjectHours'
 import { useProjects } from '../composables/useProjects'
+import { useProjectHours } from '../composables/useProjectHours'
 
 const route = useRoute()
-const { projects, loading, error, loadProjects, findById } = useProjects()
-const project = computed(() => typeof route.params.id === 'string' ? findById(route.params.id) : undefined)
-const projectHours = computed(() => project.value ?? { budget: 0, recorded: 0 })
-const { progress } = useProjectHours(projectHours)
+const { projects, loading, loaded, error, loadProjects } = useProjects()
+const project = computed(() => {
+  const projectId = route.params.id
+  return typeof projectId === 'string'
+    ? projects.value.find((item) => item.id === projectId)
+    : undefined
+})
+const projectForHours = computed(() => project.value ?? {
+  id: '',
+  name: '',
+  description: '',
+  status: 'Actief' as const,
+  budget: 0,
+  recorded: 0,
+  updatedAt: '',
+  phases: [],
+})
+const { remaining, progress } = useProjectHours(projectForHours)
 
 onMounted(() => {
-  if (!projects.value.length) {
+  if (!loaded.value) {
     void loadProjects()
   }
 })
@@ -24,7 +38,7 @@ onMounted(() => {
       <span aria-hidden="true">←</span> {{ $t('project.backToDashboard') }}
     </RouterLink>
 
-    <p v-if="loading" class="empty-state" role="status">{{ $t('dashboard.loading') }}</p>
+    <p v-if="loading || !loaded" class="empty-state" role="status">{{ $t('dashboard.loading') }}</p>
     <div v-else-if="error" class="empty-state" role="alert">
       <p>{{ error }}</p>
       <button class="text-button" type="button" @click="loadProjects">{{ $t('dashboard.retry') }}</button>
@@ -35,7 +49,11 @@ onMounted(() => {
         <div>
           <p class="eyebrow">{{ $t('project.eyebrow') }}</p>
           <h1 id="project-heading">{{ project.name }}</h1>
+          <p class="page-heading__description">{{ project.description }}</p>
         </div>
+        <span class="status-pill" :class="`status-pill--${project.status.toLowerCase().replace(' ', '-')}`">
+          {{ $t(`status.${project.status}`) }}
+        </span>
       </div>
 
       <section class="detail-hours-card" aria-labelledby="detail-hours-heading">
@@ -44,13 +62,15 @@ onMounted(() => {
             <p class="eyebrow">{{ $t('project.hoursOverview') }}</p>
             <h2 id="detail-hours-heading">{{ $t('project.hoursTitle') }}</h2>
           </div>
+          <span class="detail-hours-card__updated">{{ $t('project.updated', { date: project.updatedAt }) }}</span>
         </div>
 
         <HoursSummary
           class="hours-grid--detail"
           :budget="project.budget"
           :recorded="project.recorded"
-          :remaining="project.remaining"
+          :remaining="remaining"
+          :budget-label="$t('hours.projectBudget')"
         />
         <div
           class="hours-progress"
@@ -65,6 +85,30 @@ onMounted(() => {
         <p class="overview-card__caption">
           {{ $t('hours.projectPercentUsed', { percent: Math.round(progress) }) }}
         </p>
+      </section>
+
+      <section class="detail-lower-grid">
+        <div class="detail-panel">
+          <p class="eyebrow">{{ $t('project.workDistribution') }}</p>
+          <h2>{{ $t('project.hoursByPhase') }}</h2>
+          <ul v-if="project.phases.length" class="phase-list">
+            <li v-for="phase in project.phases" :key="phase.name" class="phase-row">
+              <span>{{ phase.name }}</span>
+              <span class="phase-row__track" aria-hidden="true">
+                <span :style="{ width: `${project.recorded ? (phase.hours / project.recorded) * 100 : 0}%` }"></span>
+              </span>
+              <strong>{{ phase.hours }} {{ $t('hours.unit') }}</strong>
+            </li>
+          </ul>
+          <p v-else class="empty-state">{{ $t('project.noPhaseBreakdown') }}</p>
+        </div>
+
+        <aside class="detail-panel detail-panel--note">
+          <p class="eyebrow">{{ $t('project.projectInformation') }}</p>
+          <h2>{{ $t('project.viewOnly') }}</h2>
+          <p>{{ $t('project.viewOnlyDescription') }}</p>
+          <p class="sync-note">{{ $t('project.backendNote') }}</p>
+        </aside>
       </section>
     </template>
   </section>

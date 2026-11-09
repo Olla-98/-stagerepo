@@ -1,16 +1,34 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import HoursSummary from '../components/HoursSummary.vue'
 import ProjectCard from '../components/ProjectCard.vue'
 import { useProjects } from '../composables/useProjects'
+import type { ProjectStatus } from '../types'
 
-const { projects, loading, error, loadProjects } = useProjects()
-const totalBudget = computed(() => projects.value.reduce((total, project) => total + project.budget, 0))
-const totalRecorded = computed(() => projects.value.reduce((total, project) => total + project.recorded, 0))
-const totalRemaining = computed(() => projects.value.reduce((total, project) => total + project.remaining, 0))
-const usagePercent = computed(() =>
-  totalBudget.value ? Math.min(Math.round((totalRecorded.value / totalBudget.value) * 100), 100) : 0,
+const { projects, loading, loaded, error, loadProjects } = useProjects()
+const selectedFilter = ref<'all' | ProjectStatus>('all')
+const filters: Array<'all' | ProjectStatus> = [
+  'all',
+  'Actief',
+  'Afgerond',
+  'On hold',
+]
+
+const filteredProjects = computed(() => {
+  if (selectedFilter.value === 'all') {
+    return projects.value
+  }
+
+  return projects.value.filter((project) => project.status === selectedFilter.value)
+})
+
+const totalBudget = computed(() =>
+  filteredProjects.value.reduce((total, project) => total + project.budget, 0),
 )
+const totalRecorded = computed(() =>
+  filteredProjects.value.reduce((total, project) => total + project.recorded, 0),
+)
+const totalRemaining = computed(() => totalBudget.value - totalRecorded.value)
 
 onMounted(loadProjects)
 </script>
@@ -23,9 +41,13 @@ onMounted(loadProjects)
         <h1 id="dashboard-heading">{{ $t('dashboard.heading') }}</h1>
         <p class="page-heading__description">{{ $t('dashboard.description') }}</p>
       </div>
+      <div class="updated-label">
+        <span class="updated-label__dot" aria-hidden="true"></span>
+        {{ $t('dashboard.dataSource') }}
+      </div>
     </div>
 
-    <section v-if="!loading && !error && projects.length" class="overview-card" aria-labelledby="overview-heading">
+    <section v-if="loaded && !error && filteredProjects.length" class="overview-card" aria-labelledby="overview-heading">
       <div class="overview-card__title">
         <div>
           <p class="eyebrow">{{ $t('dashboard.hoursOverview') }}</p>
@@ -68,7 +90,7 @@ onMounted(loadProjects)
       <p>{{ error }}</p>
       <button class="text-button" type="button" @click="loadProjects">{{ $t('dashboard.retry') }}</button>
     </div>
-    <div v-else-if="projects.length" class="project-grid">
+    <div v-else-if="filteredProjects.length" class="project-grid">
       <ProjectCard
         v-for="project in projects"
         :key="project.id"

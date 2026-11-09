@@ -32,22 +32,32 @@
     "eyebrow": "Projectdetails",
     "hoursOverview": "Urenoverzicht",
     "hoursTitle": "Projecturen",
-    "notFound": "Dit project bestaat niet of hoort niet bij jouw organisatie."
+    "workDistribution": "Werkverdeling",
+    "hoursByPhase": "Uren per fase",
+    "projectInformation": "Projectinformatie",
+    "viewOnly": "Alleen inzicht",
+    "viewOnlyDescription": "De project en ureninformatie is bedoeld om te bekijken. Aanpassingen zijn niet beschikbaar.",
+    "backendNote": "Project- en urenbudgetten worden opgehaald uit Simplicate.",
+    "noPhaseBreakdown": "Een uitsplitsing per fase is niet beschikbaar via de Simplicate-projectlijst.",
+    "notFound": "Dit project bestaat niet of hoort niet bij jouw organisatie.",
+    "hoursUsedFor": "Uren gebruikt voor {name}"
   },
   "dashboard": {
-    "eyebrow": "Jouw organisatie · projecten",
+    "eyebrow": "Projecten · Simplicate",
     "heading": "Altijd een goed begin.",
-    "description": "Bekijk de projecten die bij jouw organisatie horen.",
+    "description": "Bekijk de projectstatus en uren in één overzicht.",
+    "dataSource": "Live uit Simplicate",
     "hoursOverview": "Urenoverzicht",
     "allProjects": "Alle projecten",
     "projectCount": "geen projecten | {count} project | {count} projecten",
     "projectsHeading": "Projecten",
-    "projectsPrompt": "Projecten van jouw organisatie.",
-    "loading": "Projecten laden...",
+    "projectsPrompt": "Kies een project om de uren en details te bekijken.",
+    "filterLabel": "Projecten filteren",
+    "filterAll": "Alle projecten",
+    "emptyState": "Er zijn geen projecten met deze status.",
+    "loading": "Projecten laden…",
     "retry": "Opnieuw proberen",
-    "emptyState": "Er zijn nog geen projecten aan jouw organisatie gekoppeld."
-  },
-  "projects": {
+    "projects": {
     "api": {
       "error": "Projecten laden is mislukt. Probeer het opnieuw."
     }
@@ -80,12 +90,15 @@
     "passwordTooShort": "Je wachtwoord moet minimaal 8 tekens bevatten.",
     "passwordRequired": "Vul een wachtwoord in.",
     "registrationFailed": "Registratie is niet gelukt. Controleer je gegevens en probeer het opnieuw.",
+    "validationFailed": "Controleer je naam en e-mailadres. Je wachtwoord moet minimaal 8 tekens bevatten.",
     "invalidCredentials": "Ongeldig e-mailadres of wachtwoord.",
     "loginSubmit": "Inloggen",
     "registerSubmit": "Account aanmaken",
     "requestFailed": "Er is iets misgegaan. Probeer het opnieuw.",
     "connectionError": "Kan de server niet bereiken. Controleer of de backend draait en probeer het opnieuw.",
     "logoutError": "Je bent lokaal uitgelogd, maar de server kon het uitloggen niet bevestigen.",
+    "secureConnection": "Je projectgegevens worden veilig via de Nerdboard-backend uit Simplicate opgehaald.",
+    "requestError": "De aanvraag kon niet worden verwerkt.",
     "contact": "Hulp nodig? Je kan een bericht sturen naar info{'@'}nerdsandcompany.nl."
   }
 }

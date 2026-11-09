@@ -1,49 +1,40 @@
-import { readonly, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { ApiError, apiRequest } from '../services/api'
-import type { ProjectSummary } from '../types'
+import { computed, ref } from 'vue'
+import { apiRequest } from '../services/api'
+import type { Project } from '../types'
 import { useAuth } from './useAuth'
 
-const projectState = ref<ProjectSummary[]>([])
-const loadingState = ref(false)
-const errorState = ref('')
-
-function clearProjectState() {
-  projectState.value = []
-  errorState.value = ''
-  loadingState.value = false
-}
-
-window.addEventListener('nerdboard:session-changed', clearProjectState)
-window.addEventListener('nerdboard:unauthorized', clearProjectState)
+const projectList = ref<Project[]>([])
+const loading = ref(false)
+const loaded = ref(false)
+const error = ref<string | null>(null)
 
 export function useProjects() {
-  const { token } = useAuth()
-  const { t } = useI18n()
+  const projects = computed(() => projectList.value)
 
   async function loadProjects() {
-    loadingState.value = true
-    errorState.value = ''
+    const { token } = useAuth()
+    loading.value = true
+    error.value = null
 
     try {
-      projectState.value = await apiRequest<ProjectSummary[]>('/projects', { token: token.value ?? undefined })
-    } catch (requestError) {
-      errorState.value = requestError instanceof ApiError ? requestError.message : t('projects.api.error')
+      projectList.value = await apiRequest<Project[]>('/projects', {
+        token: token.value,
+      })
+    } catch (loadError) {
+      error.value = loadError instanceof Error
+        ? loadError.message
+        : 'Projectgegevens konden niet worden opgehaald.'
     } finally {
-      loadingState.value = false
+      loading.value = false
+      loaded.value = true
     }
   }
 
-  function findById(id: string) {
-    return projectState.value.find((project) => project.id === id)
+  function clearProjects() {
+    projectList.value = []
+    error.value = null
+    loaded.value = false
   }
 
-  return {
-    projects: readonly(projectState),
-    loading: readonly(loadingState),
-    error: readonly(errorState),
-    loadProjects,
-    findById,
-    clear: clearProjectState,
-  }
+  return { projects, loading, loaded, error, loadProjects, clearProjects }
 }

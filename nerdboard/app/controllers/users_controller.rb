@@ -3,6 +3,7 @@ class UsersController < ApplicationController
 
   def create
     user = User.new(user_params)
+    user.simplicate_organization_id = SimplicateService.organization_id
 
     if user.save
       render json: {
@@ -15,7 +16,11 @@ class UsersController < ApplicationController
         error_codes: user.errors.map { |error| "#{error.attribute}_#{error.type}" }
       }, status: :unprocessable_entity
     end
+  rescue SimplicateService::ConfigurationError => error
+    Rails.logger.error("Simplicate configuration error: #{error.message}")
+    render json: { error: "De Simplicate-organisatie is nog niet ingesteld." }, status: :service_unavailable
   end
+
   def me
     render json: {
       id: current_user.id,
