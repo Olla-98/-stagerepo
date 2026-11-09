@@ -16,7 +16,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_05_122648) do
     t.datetime "created_at", null: false
     t.string "email"
     t.string "password_digest"
-    t.integer "simplicate_organization_id"
+    t.string "simplicate_organization_id"
     t.datetime "updated_at", null: false
     t.string "name"
     t.index ["api_token"], name: "index_users_on_api_token", unique: true

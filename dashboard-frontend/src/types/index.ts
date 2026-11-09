@@ -5,6 +5,11 @@ export interface ProjectPhase {
   hours: number
 }
 
+export interface ProjectHours {
+  budget: number
+  recorded: number
+}
+
 export interface Project {
   id: string
   name: string
@@ -17,6 +22,8 @@ export interface Project {
 }
 
 export interface UserProfile {
-  name: string
+  id: number
+  name: string | null
   email: string
+  simplicate_organization_id?: string | number | null
 }
