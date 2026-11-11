@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import HoursSummary from '../components/HoursSummary.vue'
 import ProjectCard from '../components/ProjectCard.vue'
-import { projects } from '../data/projects'
+import { useProjects } from '../composables/useProjects'
 import type { ProjectStatus } from '../types'
 
+const { projects, loading, loaded, error, loadProjects } = useProjects()
 const selectedFilter = ref<'all' | ProjectStatus>('all')
 const filters: Array<'all' | ProjectStatus> = [
   'all',
@@ -15,10 +16,10 @@ const filters: Array<'all' | ProjectStatus> = [
 
 const filteredProjects = computed(() => {
   if (selectedFilter.value === 'all') {
-    return projects
+    return projects.value
   }
 
-  return projects.filter((project) => project.status === selectedFilter.value)
+  return projects.value.filter((project) => project.status === selectedFilter.value)
 })
 
 const totalBudget = computed(() =>
@@ -28,6 +29,8 @@ const totalRecorded = computed(() =>
   filteredProjects.value.reduce((total, project) => total + project.recorded, 0),
 )
 const totalRemaining = computed(() => totalBudget.value - totalRecorded.value)
+
+onMounted(loadProjects)
 </script>
 
 <template>
@@ -40,11 +43,11 @@ const totalRemaining = computed(() => totalBudget.value - totalRecorded.value)
       </div>
       <div class="updated-label">
         <span class="updated-label__dot" aria-hidden="true"></span>
-        {{ $t('demo.data') }}
+        {{ $t('dashboard.dataSource') }}
       </div>
     </div>
 
-    <section class="overview-card" aria-labelledby="overview-heading">
+    <section v-if="loaded && !error && filteredProjects.length" class="overview-card" aria-labelledby="overview-heading">
       <div class="overview-card__title">
         <div>
           <p class="eyebrow">{{ $t('dashboard.hoursOverview') }}</p>
@@ -92,7 +95,12 @@ const totalRemaining = computed(() => totalBudget.value - totalRecorded.value)
       </div>
     </div>
 
-    <div v-if="filteredProjects.length" class="project-grid">
+    <p v-if="loading" class="empty-state" role="status">{{ $t('dashboard.loading') }}</p>
+    <div v-else-if="error" class="empty-state" role="alert">
+      <p>{{ error }}</p>
+      <button class="text-button" type="button" @click="loadProjects">{{ $t('dashboard.retry') }}</button>
+    </div>
+    <div v-else-if="filteredProjects.length" class="project-grid">
       <ProjectCard
         v-for="project in filteredProjects"
         :key="project.id"

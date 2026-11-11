@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-import { isDemoSession } from './composables/useDemoSession'
-import { projects } from './data/projects'
+import { useAuth } from './composables/useAuth'
 import DashboardLayout from './layouts/DashboardLayout.vue'
 import DashboardPage from './views/DashboardPage.vue'
 import LoginPage from './views/LoginPage.vue'
@@ -15,7 +14,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: DashboardLayout,
-    meta: { requiresDemo: true },
+    meta: { requiresAuth: true },
     children: [
       {
         path: 'dashboard',
@@ -26,13 +25,6 @@ const routes: RouteRecordRaw[] = [
         path: 'projects/:id',
         name: 'project',
         component: ProjectDetailPage,
-        beforeEnter: (to) => {
-          const projectExists = projects.some((project) => project.id === to.params.id)
-
-          if (!projectExists) {
-            return { name: 'dashboard' }
-          }
-        },
       },
     ],
   },
@@ -47,12 +39,26 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to) => {
-  if (to.meta.requiresDemo && !isDemoSession.value) {
+router.beforeEach(async (to) => {
+  const auth = useAuth()
+
+  if (to.name === 'login' && to.query.error === 'connection') {
+    return
+  }
+
+  let authenticated = false
+
+  try {
+    authenticated = await auth.restoreSession()
+  } catch {
+    return { name: 'login', query: { error: 'connection' } }
+  }
+
+  if (to.meta.requiresAuth && !authenticated) {
     return { name: 'login' }
   }
 
-  if (to.name === 'login' && isDemoSession.value) {
+  if (to.name === 'login' && authenticated) {
     return { name: 'dashboard' }
   }
 })
