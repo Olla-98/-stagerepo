@@ -63,7 +63,9 @@
     "filterAll": "Alle projecten",
     "emptyState": "Er zijn geen projecten met deze status.",
     "loading": "Projecten laden…",
-    "retry": "Opnieuw proberen"
+    "retry": "Opnieuw proberen",
+    "loadError": "De projectgegevens konden niet worden geladen. Probeer het opnieuw.",
+    "connectionError": "De verbinding met Nerdboard is mislukt. Controleer je internetverbinding en probeer het opnieuw."
   },
   "login": {
     "introEyebrow": "Jouw projecten, zijn altijd zichtbaar in Nerdboard",

@@ -1,5 +1,6 @@
 import { computed, ref } from 'vue'
-import { apiRequest } from '../services/api'
+import { ApiError, apiRequest } from '../services/api'
+import i18n from '../i18n'
 import type { Project } from '../types'
 import { useAuth } from './useAuth'
 
@@ -21,9 +22,16 @@ export function useProjects() {
         token: token.value,
       })
     } catch (loadError) {
-      error.value = loadError instanceof Error
-        ? loadError.message
-        : 'Projectgegevens konden niet worden opgehaald.'
+      if (loadError instanceof TypeError) {
+        error.value = i18n.global.t('dashboard.connectionError')
+      } else if (
+        loadError instanceof ApiError &&
+        !loadError.message.startsWith('Request failed')
+      ) {
+        error.value = loadError.message
+      } else {
+        error.value = i18n.global.t('dashboard.loadError')
+      }
     } finally {
       loading.value = false
       loaded.value = true
