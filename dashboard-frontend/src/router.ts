@@ -47,6 +47,10 @@ const router = createRouter({
   routes,
 })
 
+window.addEventListener('nerdboard:unauthorized', () => {
+  void router.replace({ name: 'login' })
+})
+
 router.beforeEach(async (to) => {
   const auth = useAuth()
 

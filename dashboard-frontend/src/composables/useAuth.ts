@@ -1,41 +1,40 @@
 import { computed, ref } from 'vue'
-import { apiRequest } from '../services/api'
-import { clearProjectState } from './projectState'
+import { ApiError, apiRequest } from '../services/api'
 import type { UserProfile } from '../types'
 
 const tokenKey = 'nerdboard-auth-token'
 const storedToken = sessionStorage.getItem(tokenKey)
 const accessToken = ref<string | null>(storedToken)
 const currentUser = ref<UserProfile | null>(null)
-let sessionRestored = false
+let sessionChecked = false
 let restorePromise: Promise<boolean> | null = null
 
 export const isAuthenticated = computed(() => accessToken.value !== null && currentUser.value !== null)
 
 function saveToken(token: string) {
-  clearProjectState()
   sessionStorage.setItem(tokenKey, token)
   accessToken.value = token
-  sessionRestored = false
+  sessionChecked = false
 }
 
 function clearSession() {
-  clearProjectState()
   sessionStorage.removeItem(tokenKey)
   accessToken.value = null
   currentUser.value = null
-  sessionRestored = true
+  sessionChecked = true
 }
+
+window.addEventListener('nerdboard:unauthorized', clearSession)
 
 export function useAuth() {
   async function restoreSession(): Promise<boolean> {
     if (!accessToken.value) {
       currentUser.value = null
-      sessionRestored = true
+      sessionChecked = true
       return false
     }
 
-    if (sessionRestored && currentUser.value) {
+    if (sessionChecked && currentUser.value) {
       return true
     }
 
@@ -43,11 +42,11 @@ export function useAuth() {
       restorePromise = apiRequest<UserProfile>('/me', { token: accessToken.value })
         .then((user) => {
           currentUser.value = user
-          sessionRestored = true
+          sessionChecked = true
           return true
         })
         .catch((error: unknown) => {
-          if (typeof error === 'object' && error !== null && 'status' in error && error.status === 401) {
+          if (error instanceof ApiError && error.status === 401) {
             clearSession()
             return false
           }
@@ -78,7 +77,7 @@ export function useAuth() {
     })
     saveToken(result.token)
     currentUser.value = result.user
-    sessionRestored = true
+    sessionChecked = true
   }
 
   async function logout() {

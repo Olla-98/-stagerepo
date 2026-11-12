@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import DashboardNav from '../components/DashboardNav.vue'
@@ -9,13 +9,19 @@ const router = useRouter()
 const { t } = useI18n()
 const { user, logout } = useAuth()
 const userName = computed(() => user.value?.name ?? t('account.defaultUser'))
+const loggingOut = ref(false)
 
-async function signOut() {
+async function handleLogout() {
+  if (loggingOut.value) return
+
+  loggingOut.value = true
   try {
     await logout()
     await router.replace({ name: 'login' })
   } catch {
     await router.replace({ name: 'login', query: { error: 'logout' } })
+  } finally {
+    loggingOut.value = false
   }
 }
 </script>
@@ -29,7 +35,12 @@ async function signOut() {
       </RouterLink>
       <div class="topbar__account">
         <span class="topbar__user">{{ userName }}</span>
-        <button class="button button--quiet button--small" type="button" @click="signOut">
+        <button
+          class="button button--quiet button--small"
+          type="button"
+          :disabled="loggingOut"
+          @click="handleLogout"
+        >
           {{ $t('account.logout') }}
         </button>
       </div>
