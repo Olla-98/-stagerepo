@@ -10,7 +10,7 @@ class User < ApplicationRecord
       presence: true,
       uniqueness: { case_sensitive: false },
       format: { with: URI::MailTo::EMAIL_REGEXP }
-    validates :api_token, presence: true, uniqueness: true
+    validates :api_token, uniqueness: true, allow_nil: true
     validates :password, length: { minimum: 8 }, allow_nil: true
 
     def api_token_valid?
@@ -22,7 +22,7 @@ class User < ApplicationRecord
     end
 
     def revoke_api_token!
-      update!(api_token: SecureRandom.hex(32), api_token_expires_at: nil)
+      update!(api_token: nil, api_token_expires_at: nil)
     end
 
     private

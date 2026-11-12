@@ -11,6 +11,11 @@ export class ApiError extends Error {
   }
 }
 
+interface ApiErrorResponse {
+  error?: string
+  errors?: string[]
+}
+
 interface ApiRequestOptions extends RequestInit {
   token?: string
 }
@@ -28,11 +33,15 @@ export async function apiRequest<T>(
     },
   })
 
+  if (response.status === 401 && token) {
+    window.dispatchEvent(new Event('nerdboard:unauthorized'))
+  }
+
   if (!response.ok) {
     let message = `Request failed (${response.status})`
 
     try {
-      const body = (await response.json()) as { error?: string; errors?: string[] }
+      const body = (await response.json()) as ApiErrorResponse
       message = body.error ?? body.errors?.join(', ') ?? message
     } catch {
       // Keep the HTTP status message when the server does not return JSON.

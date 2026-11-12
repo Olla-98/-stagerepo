@@ -25,6 +25,13 @@ class UserTest < ActiveSupport::TestCase
     assert_includes user.errors[:email], "is invalid"
   end
 
+  test "requires an email address" do
+    user = User.new(valid_attributes.merge(email: ""))
+
+    assert_not user.valid?
+    assert_includes user.errors[:email], "can't be blank"
+  end
+
   test "requires a unique email address regardless of case" do
     user = User.new(valid_attributes.merge(email: "ONE@example.com"))
 
@@ -39,13 +46,12 @@ class UserTest < ActiveSupport::TestCase
     assert_includes user.errors[:password], "is too short (minimum is 8 characters)"
   end
 
-  test "revoking a token clears its expiry and replaces its value" do
+  test "revoking a token clears it and its expiry" do
     user = users(:one)
-    old_token = user.api_token
 
     user.revoke_api_token!
 
-    assert_not_equal old_token, user.api_token
+    assert_nil user.api_token
     assert_nil user.api_token_expires_at
     assert_not user.api_token_valid?
   end

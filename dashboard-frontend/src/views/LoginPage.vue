@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuth } from '../composables/useAuth'
+import { ApiError } from '../services/api'
 
 const router = useRouter()
 const route = useRoute()
@@ -14,6 +15,12 @@ const email = ref('')
 const password = ref('')
 const message = ref('')
 const submitting = ref(false)
+const routeErrorMessage = computed(() => {
+  if (route.query.error === 'connection') return t('login.connectionError')
+  if (route.query.error === 'logout') return t('login.logoutError')
+
+  return ''
+})
 
 async function submitForm() {
   message.value = ''
@@ -37,7 +44,13 @@ async function submitForm() {
     }
     await router.push({ name: 'dashboard' })
   } catch (error) {
-    message.value = error instanceof Error ? error.message : t('login.requestFailed')
+    if (error instanceof ApiError && error.status === 422) {
+      message.value = t('login.validationFailed')
+    } else if (error instanceof ApiError && error.status === 401) {
+      message.value = t('login.invalidCredentials')
+    } else {
+      message.value = t('login.requestFailed')
+    }
   } finally {
     submitting.value = false
   }
@@ -134,11 +147,8 @@ async function submitForm() {
           </button>
         </form>
 
-        <p v-if="route.query.error === 'connection'" class="form-message" role="alert">
-          {{ $t('login.connectionError') }}
-        </p>
-        <p v-else-if="route.query.error === 'logout'" class="form-message" role="alert">
-          {{ $t('login.logoutError') }}
+        <p v-if="routeErrorMessage" class="form-message" role="alert">
+          {{ routeErrorMessage }}
         </p>
       </section>
 

@@ -2,7 +2,8 @@ class SessionsController < ApplicationController
   before_action :authenticate_request, only: :destroy
 
   def create
-    user = User.find_by(email: params[:email])
+    email = params[:email].to_s
+    user = User.where("LOWER(email) = ?", email.downcase).first
     unless user&.authenticate(params[:password])
       render json: { error: "Ongeldige inloggegevens" }, status: :unauthorized
       return
