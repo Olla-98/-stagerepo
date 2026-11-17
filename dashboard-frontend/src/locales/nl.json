@@ -89,8 +89,13 @@
     "passwordPlaceholder": "Je wachtwoord",
     "missingCredentials": "Vul je e-mailadres en wachtwoord in.",
     "missingName": "Vul je naam in.",
-    "loginSubmit": "Inloggen en demo bekijken",
-    "registerSubmit": "Registreren en demo bekijken",
+    "validationFailed": "Controleer je naam en e-mailadres. Je wachtwoord moet minimaal 8 tekens bevatten.",
+    "invalidCredentials": "Ongeldig e-mailadres of wachtwoord.",
+    "loginSubmit": "Inloggen",
+    "registerSubmit": "Account aanmaken",
+    "requestFailed": "Er is iets misgegaan. Probeer het opnieuw.",
+    "connectionError": "Kan de server niet bereiken. Controleer of de backend draait en probeer het opnieuw.",
+    "logoutError": "Je bent lokaal uitgelogd, maar de server kon het uitloggen niet bevestigen.",
     "contact": "Hulp nodig? Je kan een bericht sturen naar info{'@'}nerdsandcompany.nl."
   }
 }

@@ -1,19 +1,30 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useDemoSession } from '../composables/useDemoSession'
+import { useAuth } from '../composables/useAuth'
+import { ApiError } from '../services/api'
 
 const router = useRouter()
+const route = useRoute()
 const { t } = useI18n()
-const { startDemoSession } = useDemoSession()
+const { login, register } = useAuth()
 const mode = ref<'login' | 'register'>('login')
 const name = ref('')
 const email = ref('')
 const password = ref('')
 const message = ref('')
+const submitting = ref(false)
+const routeErrorMessage = computed(() => {
+  if (route.query.error === 'connection') return t('login.connectionError')
+  if (route.query.error === 'logout') return t('login.logoutError')
 
-function submitForm() {
+  return ''
+})
+
+async function submitForm() {
+  message.value = ''
+
   if (!email.value || !password.value) {
     message.value = t('login.missingCredentials')
     return
@@ -24,8 +35,25 @@ function submitForm() {
     return
   }
 
-  startDemoSession(email.value, mode.value === 'register' ? name.value : undefined)
-  router.push({ name: 'dashboard' })
+  submitting.value = true
+  try {
+    if (mode.value === 'register') {
+      await register(name.value.trim(), email.value, password.value)
+    } else {
+      await login(email.value, password.value)
+    }
+    await router.push({ name: 'dashboard' })
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 422) {
+      message.value = t('login.validationFailed')
+    } else if (error instanceof ApiError && error.status === 401) {
+      message.value = t('login.invalidCredentials')
+    } else {
+      message.value = t('login.requestFailed')
+    }
+  } finally {
+    submitting.value = false
+  }
 }
 </script>
 
@@ -114,12 +142,14 @@ function submitForm() {
 
           <p v-if="message" class="form-message" role="alert">{{ message }}</p>
 
-          <button class="button button--primary button--wide" type="submit">
+          <button class="button button--primary button--wide" type="submit" :disabled="submitting">
             {{ mode === 'login' ? $t('login.loginSubmit') : $t('login.registerSubmit') }}
           </button>
         </form>
 
-        <p class="demo-explanation">{{ $t('demo.explanation') }}</p>
+        <p v-if="routeErrorMessage" class="form-message" role="alert">
+          {{ routeErrorMessage }}
+        </p>
       </section>
 
       <footer class="auth-contact">
