@@ -1,0 +1,9 @@
+source "https://rubygems.org"
+
+gem "dotenv", "~> 3.1"
+gem "net-smtp"
+gem "sqlite3", "~> 2.7"
+
+group :test do
+  gem "minitest"
+end
