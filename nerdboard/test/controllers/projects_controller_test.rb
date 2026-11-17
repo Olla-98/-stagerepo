@@ -1,32 +1,23 @@
 require "test_helper"
 
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
-  test "returns only projects belonging to the authenticated user's organization" do
+  test "reports when the Simplicate connection is not configured" do
     user = users(:one)
-    user.update_column(:simplicate_organization_id, 999)
+    names = %w[SIMPLICATE_SUBDOMAIN SIMPLICATE_API_KEY SIMPLICATE_API_SECRET SIMPLICATE_ORGANIZATION_ID]
+    original = names.to_h { |name| [ name, ENV[name] ] }
+    names.each { |name| ENV.delete(name) }
 
-    get "/projects", headers: { "Authorization" => "Bearer #{user.api_token}" }
+    begin
+      get "/projects", headers: { "Authorization" => "Bearer #{user.api_token}" }
+    ensure
+      original.each { |name, value| value.nil? ? ENV.delete(name) : ENV[name] = value }
+    end
 
-    assert_response :ok
-    assert_equal [
-      {
-        "id" => "1",
-        "name" => "Website ontwikkeling en onderhoud",
-        "budget" => 1000,
-        "recorded" => 10,
-        "remaining" => 990
-      },
-      {
-        "id" => "2",
-        "name" => "Webshop Sima",
-        "budget" => 5000,
-        "recorded" => 20,
-        "remaining" => 4980
-      }
-    ], response.parsed_body
+    assert_response :service_unavailable
+    assert_equal "De Simplicate-koppeling is nog niet volledig ingesteld.", response.parsed_body["error"]
   end
 
-  test "projects require authentication" do
+  test "does not return projects without authentication" do
     get "/projects"
 
     assert_response :unauthorized
