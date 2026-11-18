@@ -18,6 +18,7 @@ const submitting = ref(false)
 const routeErrorMessage = computed(() => {
   if (route.query.error === 'connection') return t('login.connectionError')
   if (route.query.error === 'logout') return t('login.logoutError')
+  if (route.query.error === 'session-expired') return t('login.sessionExpired')
 
   return ''
 })

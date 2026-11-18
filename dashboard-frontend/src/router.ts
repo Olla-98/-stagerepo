@@ -40,7 +40,7 @@ const router = createRouter({
 })
 
 window.addEventListener('nerdboard:unauthorized', () => {
-  void router.replace({ name: 'login' })
+  void router.replace({ name: 'login', query: { error: 'session-expired' } })
 })
 
 router.beforeEach(async (to) => {

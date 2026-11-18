@@ -1,40 +1,47 @@
-import { computed, ref } from 'vue'
 import { apiRequest } from '../services/api'
+import i18n from '../i18n'
 import type { Project } from '../types'
+import {
+  clearProjectState,
+  projects,
+  projectsError,
+  projectsLoaded,
+  projectsLoading,
+} from './projectState'
 import { useAuth } from './useAuth'
 
-const projectList = ref<Project[]>([])
-const loading = ref(false)
-const loaded = ref(false)
-const error = ref<string | null>(null)
-
 export function useProjects() {
-  const projects = computed(() => projectList.value)
-
   async function loadProjects() {
     const { token } = useAuth()
-    loading.value = true
-    error.value = null
+    projectsLoading.value = true
+    projectsError.value = ''
 
     try {
-      projectList.value = await apiRequest<Project[]>('/projects', {
+      const projectList = await apiRequest<Project[]>('/projects', {
         token: token.value,
       })
+      projects.value = projectList.map((project) => ({
+        ...project,
+        remaining: project.budget - project.recorded,
+      }))
     } catch (loadError) {
-      error.value = loadError instanceof Error
-        ? loadError.message
-        : 'Projectgegevens konden niet worden opgehaald.'
+      if (loadError instanceof TypeError) {
+        projectsError.value = i18n.global.t('dashboard.connectionError')
+      } else {
+        projectsError.value = i18n.global.t('dashboard.loadError')
+      }
     } finally {
-      loading.value = false
-      loaded.value = true
+      projectsLoading.value = false
+      projectsLoaded.value = true
     }
   }
 
-  function clearProjects() {
-    projectList.value = []
-    error.value = null
-    loaded.value = false
+  return {
+    projects,
+    loading: projectsLoading,
+    loaded: projectsLoaded,
+    error: projectsError,
+    loadProjects,
+    clearProjects: clearProjectState,
   }
-
-  return { projects, loading, loaded, error, loadProjects, clearProjects }
 }
