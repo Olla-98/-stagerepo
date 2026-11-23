@@ -21,7 +21,7 @@ De voorlopige technische stack bestaat uit:
 
 | Backend                  |  Ruby                              |
 
-| Backend framework        | Rails                              |
+| Backend framework        | Ruby on Rails                         |
 
 | Data-integratie          | Simplicate REST API                  |
 
@@ -304,7 +304,7 @@ urenbudget - geregistreerde uren
 De backend geeft vervolgens de verwerkte gegevens terug aan de frontend.
 
 
-## 14. Beveiliging
+## 15. Beveiliging
 
 De applicatie moet rekening houden met de volgende beveiligingsmaatregelen:
 
@@ -320,7 +320,7 @@ De applicatie moet rekening houden met de volgende beveiligingsmaatregelen:
 * geen gevoelige interne Simplicate-informatie naar de frontend sturen.
 
 
-## 15. Foutafhandeling
+## 16. Foutafhandeling
 
 De backend moet fouten van Simplicate correct afhandelen.
 
@@ -337,7 +337,7 @@ De backend geeft hierbij een passende HTTP-status en foutmelding terug.
 Technische details zoals API-credentials of stack traces worden niet naar de gebruiker gestuurd.
 
 
-## 16. API-limieten
+## 17. API-limieten
 
 Bij het gebruik van de Simplicate API moet rekening worden gehouden met API-rate limiting.
 
@@ -346,7 +346,7 @@ De applicatie moet daarom voorkomen dat onnodig veel requests worden uitgevoerd.
 Tijdens de implementatie wordt gekeken welke gegevens gecombineerd kunnen worden en welke requests daadwerkelijk noodzakelijk zijn.
 
 
-## 17. Real-time informatie
+## 18. Real-time informatie
 
 Het dashboard moet actuele informatie uit Simplicate tonen.
 
@@ -356,7 +356,7 @@ De Simplicate Insights API wordt niet als primaire databron gebruikt wanneer act
 
 
 
-## 18. Versiebeheer
+## 19. Versiebeheer
 
 Git wordt gebruikt voor versiebeheer.
 
@@ -375,7 +375,7 @@ feature/testing
 Na afronding wordt een Pull Request aangemaakt en wordt de feature gemerged naar `main`.
 
 
-## 19. Technische afbakening
+## 20. Technische afbakening
 
 De applicatie richt zich op een eenvoudige klantgerichte weergave van project- en ureninformatie.
 
