@@ -22,6 +22,28 @@ const routeErrorMessage = computed(() => {
   return ''
 })
 
+function switchMode(nextMode: 'login' | 'register') {
+  if (mode.value === nextMode) return
+
+  mode.value = nextMode
+  password.value = ''
+  message.value = ''
+}
+
+function registrationErrorMessage(error: ApiError) {
+  const translations: Record<string, string> = {
+    email_taken: 'login.emailAlreadyUsed',
+    email_invalid: 'login.invalidEmail',
+    email_blank: 'login.invalidEmail',
+    name_blank: 'login.missingName',
+    password_too_short: 'login.passwordTooShort',
+    password_blank: 'login.passwordRequired',
+  }
+  const messages = [...new Set(error.errorCodes.map((code) => translations[code]).filter(Boolean))]
+
+  return messages.length ? messages.map((key) => t(key)).join(' ') : t('login.registrationFailed')
+}
+
 async function submitForm() {
   message.value = ''
 
@@ -44,10 +66,16 @@ async function submitForm() {
     }
     await router.push({ name: 'dashboard' })
   } catch (error) {
-    if (error instanceof ApiError && error.status === 422) {
-      message.value = t('login.validationFailed')
-    } else if (error instanceof ApiError && error.status === 401) {
-      message.value = t('login.invalidCredentials')
+    if (error instanceof ApiError) {
+      if (mode.value === 'register' && error.status === 422) {
+        message.value = registrationErrorMessage(error)
+      } else if (mode.value === 'login' && [400, 401, 422].includes(error.status)) {
+        message.value = t('login.invalidCredentials')
+      } else {
+        message.value = t('login.requestFailed')
+      }
+    } else if (error instanceof TypeError) {
+      message.value = t('login.connectionError')
     } else {
       message.value = t('login.requestFailed')
     }
@@ -93,7 +121,7 @@ async function submitForm() {
             :class="{ 'auth-tab--active': mode === 'login' }"
             type="button"
             :aria-pressed="mode === 'login'"
-            @click="mode = 'login'; message = ''"
+            @click="switchMode('login')"
           >
             {{ $t('login.loginTab') }}
           </button>
@@ -103,7 +131,7 @@ async function submitForm() {
             :class="{ 'auth-tab--active': mode === 'register' }"
             type="button"
             :aria-pressed="mode === 'register'"
-            @click="mode = 'register'; message = ''"
+            @click="switchMode('register')"
           >
             {{ $t('login.registerTab') }}
           </button>
