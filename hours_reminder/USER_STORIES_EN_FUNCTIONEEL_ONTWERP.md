@@ -72,9 +72,10 @@ Acceptatiecriteria:
 
 - E-mailverzending staat standaard uit en wordt alleen geactiveerd met
   `SEND_REMINDERS=true`.
-- Verzendmodus vereist een expliciete lijst Simplicate-medewerker-ID's in
-  `REMINDER_EMPLOYEE_IDS`. ID's die niet in de opgehaalde medewerkerslijst
-  voorkomen, veroorzaken een configuratiefout.
+- In verzendmodus worden standaard alle medewerkers met een ontbrekende
+  urenindiening gemaild. `REMINDER_EMPLOYEE_IDS` kan optioneel een beperkte
+  test- of selectie-run afdwingen. ID's die niet in de opgehaalde
+  medewerkerslijst voorkomen, veroorzaken een configuratiefout.
 - De mail noemt de medewerker en de weekperiode en vraagt de medewerker de
   urenregistratie te controleren en de urenweek in Simplicate in te dienen.
 - De ontvanger is het e-mailadres dat voor de medewerker in Simplicate is
@@ -135,9 +136,10 @@ Acceptatiecriteria:
 2. De applicatie bepaalt de te controleren week: standaard de vorige
    kalenderweek, of de maandag die met `--week-start` is opgegeven.
 3. De applicatie haalt de medewerkers op met `GET /hrm/employee`.
-4. In verzendmodus wordt de medewerkerslijst beperkt tot de ID's in
-   `REMINDER_EMPLOYEE_IDS`. Een opgegeven ID dat niet in de lijst voorkomt,
-   resulteert in een configuratiefout.
+4. Als `REMINDER_EMPLOYEE_IDS` is ingevuld, beperkt de applicatie de
+   medewerkerslijst tot die ID's. Een opgegeven ID dat niet in de lijst
+   voorkomt, resulteert in een configuratiefout. Als de instelling leeg is,
+   worden alle medewerkers gecontroleerd.
 5. De applicatie vraagt voor iedere medewerker de indienstatus op met
    `GET /hours/submission`.
 6. Bij een API-fout of een niet-herkende status stopt de uitvoering met een
@@ -185,8 +187,8 @@ configuratievoorziening worden gebruikt.
 - `DATABASE_PATH`: locatie van de SQLite-database; standaard
   `var/reminders.sqlite3`.
 - `SEND_REMINDERS`: schakelt e-mailverzending in; standaard `false`.
-- `REMINDER_EMPLOYEE_IDS`: toegestane medewerker-ID's; verplicht wanneer
-  verzending is ingeschakeld.
+- `REMINDER_EMPLOYEE_IDS`: optionele komma-gescheiden selectie van
+  medewerker-ID's; leeg betekent alle medewerkers.
 - `REMINDER_FROM`, `SMTP_ADDRESS`, `SMTP_PORT`, `SMTP_USERNAME`,
   `SMTP_PASSWORD`, `SMTP_AUTHENTICATION`, `SMTP_STARTTLS`: e-mailconfiguratie.
 
@@ -235,8 +237,8 @@ gevalideerd.
 
 Voor een gecontroleerde verzendtest wordt een testmedewerker gebruikt van wie
 het e-mailadres onder beheer van het testteam valt. De huidige implementatie
-gebruikt het e-mailadres uit Simplicate; `REMINDER_EMPLOYEE_IDS` beperkt de
-medewerkersselectie, maar wijzigt de ontvanger niet.
+gebruikt het e-mailadres uit Simplicate; `REMINDER_EMPLOYEE_IDS` kan de
+medewerkersselectie voor deze test beperken, maar wijzigt de ontvanger niet.
 
 De test omvat:
 

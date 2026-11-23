@@ -109,7 +109,7 @@ class WeeklyHoursReminderTest < Minitest::Test
   end
 
   def test_simplicate_submission_status_uses_employee_and_week_date
-    http = FakeHttp.new('{"data":{"submitted":false}}')
+    http = FakeHttp.new('{"data":[{"status":"yet_to_turn_in"}]}')
     client = WeeklyHoursReminder::SimplicateClient.new(
       subdomain: "example",
       api_key: "key",
@@ -118,8 +118,8 @@ class WeeklyHoursReminderTest < Minitest::Test
     )
 
     refute client.submitted?(employee_id: "e1", date: Date.new(2026, 11, 2))
-    assert_includes http.last_request.path, "employee_id=e1"
-    assert_includes http.last_request.path, "date=2026-11-02"
+    assert_includes http.last_request.path, "q%5Bemployee_id%5D=e1"
+    assert_includes http.last_request.path, "q%5Bstart_date%5D=2026-11-02"
     assert_equal "key", http.last_request["Authentication-Key"]
   end
 

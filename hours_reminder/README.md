@@ -50,10 +50,11 @@ Vul in `.env` de Simplicate-subdomeinnaam en API-key/secret in. De API-account
 heeft de benodigde leesrechten nodig. Het lokale `.env`-bestand bevat
 toegangsgegevens en wordt niet opgenomen in versiebeheer.
 De dry-run gebruikt alle medewerkers die Simplicate teruggeeft. Controleer de
-getoonde e-mailadressen. Voor echte verzending is `REMINDER_EMPLOYEE_IDS`
-verplicht: vul daar een komma-gescheiden lijst in met de goedgekeurde
-Simplicate-medewerker-ID's. Zo worden geen e-mails gestuurd voordat de
-ontvangers gecontroleerd zijn.
+getoonde e-mailadressen. `REMINDER_EMPLOYEE_IDS` is optioneel: leeg betekent
+dat alle medewerkers met een ontbrekende urenindiening worden geselecteerd.
+Vul voor een beperkte test een komma-gescheiden lijst met medewerker-ID's in.
+ID's die niet in de Simplicate-medewerkerslijst voorkomen, veroorzaken een
+configuratiefout.
 
 Voer een controle uit voor de vorige week. `SEND_REMINDERS=false` (de
 standaard) betekent dat e-mails alleen worden getoond als dry-run:
@@ -68,9 +69,14 @@ Je kunt een specifieke week controleren door de maandagdatum op te geven:
 bundle exec ruby bin/send_weekly_reminders --week-start 2026-11-02
 ```
 
-Zet pas na controle van API-resultaten en e-mailadressen `SEND_REMINDERS=true`
-en vul de SMTP-instellingen in. De database voorkomt dat dezelfde medewerker
-voor dezelfde week bij een volgende uitvoering opnieuw een e-mail krijgt.
+E-mail staat standaard uit. Voor een gecontroleerde verzendtest zet je
+`SEND_REMINDERS=true`, configureer je de SMTP-instellingen en beperk je de
+ontvangers tijdelijk met `REMINDER_EMPLOYEE_IDS` tot een testmedewerker van
+wie je het e-mailadres beheert. Gebruik voor die test een aparte
+`DATABASE_PATH`, zodat de testverzending de normale verzendregistratie niet
+beïnvloedt. Voor normaal gebruik laat je `REMINDER_EMPLOYEE_IDS` leeg; dan
+worden alle medewerkers met een ontbrekende indiening gemaild. De database
+voorkomt dubbele herinneringen per medewerker en week.
 
 ## Wekelijks automatisch uitvoeren
 

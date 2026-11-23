@@ -26,9 +26,6 @@ client = WeeklyHoursReminder::SimplicateClient.new(
 store = WeeklyHoursReminder::DeliveryStore.new(ENV.fetch("DATABASE_PATH", "var/reminders.sqlite3"))
 send_reminders = ENV.fetch("SEND_REMINDERS", "false") == "true"
 employee_ids = ENV.fetch("REMINDER_EMPLOYEE_IDS", "").split(",").map(&:strip).reject(&:empty?)
-if send_reminders && employee_ids.empty?
-  raise WeeklyHoursReminder::ConfigurationError, "Vul gecontroleerde IDs in REMINDER_EMPLOYEE_IDS in voordat je e-mail activeert."
-end
 
 mailer = if send_reminders
   WeeklyHoursReminder::Mailer.new(
