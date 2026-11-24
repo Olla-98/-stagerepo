@@ -7,3 +7,6 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+# user = User.find_or_create_by!()
+# project1 = Project.find_or_create_by!(project_id: 1, user_id: user.id)
+# project2 = Project.find_or_create_by!(project_id: 2, user_id: user.id)

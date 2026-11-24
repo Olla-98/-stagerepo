@@ -1,20 +1,30 @@
 import { computed, type Ref } from 'vue'
+import { ApiError, apiRequest } from '../services/api'
 import type { Project } from '../types'
 
-export function useProjectHours(project: Ref<Project>) {
-  const remaining = computed(
-    () => project.value.budget - project.value.recorded,
-  )
+export async function useProjectHours() {
+  const tokenKey = 'nerdboard-auth-token'
+  const storedToken = sessionStorage.getItem(tokenKey)
 
-  const progress = computed(() => {
-    const { budget, recorded } = project.value
+  const result = await apiRequest<{ id: string, name: string, organization_id: string, budget: number, geregistreerde_uren: number, resterende_uren: number }>('/projects', {
+        method: 'GET'
+      });
 
-    if (budget === 0) {
-      return 0
-    }
+  return result;
 
-    return Math.min((recorded / budget) * 100, 100)
-  })
+  // const remaining = computed(
+  //   () => project.value.budget - project.value.recorded,
+  // )
 
-  return { remaining, progress }
+  // const progress = computed(() => {
+  //   const { budget, recorded } = project.value
+
+  //   if (budget === 0) {
+  //     return 0
+  //   }
+
+  //   return Math.min((recorded / budget) * 100, 100)
+  // })
+
+  // return { remaining, progress }
 }

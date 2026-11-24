@@ -1,42 +1,10 @@
-<script setup lang="ts">
-import { computed, onMounted } from 'vue'
-import { useRoute, RouterLink } from 'vue-router'
-import HoursSummary from '../components/HoursSummary.vue'
-import { useProjects } from '../composables/useProjects'
-import { useProjectHours } from '../composables/useProjectHours'
-
-const route = useRoute()
-const { projects, loading, loaded, error, loadProjects } = useProjects()
-const project = computed(() => {
-  const projectId = route.params.id
-  return typeof projectId === 'string'
-    ? projects.value.find((item) => item.id === projectId)
-    : undefined
-})
-const projectForHours = computed(() => project.value ?? {
-  id: '',
-  name: '',
-  description: '',
-  status: 'Actief' as const,
-  budget: 0,
-  recorded: 0,
-  updatedAt: '',
-  phases: [],
-})
-const { remaining, progress } = useProjectHours(projectForHours)
-
-onMounted(() => {
-  if (!loaded.value) {
-    void loadProjects()
-  }
-})
-</script>
-
 <template>
-  <section class="page-section" aria-labelledby="project-heading">
-    <RouterLink class="back-button" :to="{ name: 'dashboard' }">
-      <span aria-hidden="true">←</span> {{ $t('project.backToDashboard') }}
-    </RouterLink>
+  <div v-if="isLoading">Laden...</div>
+  <div v-else>
+    <section class="page-section" aria-labelledby="project-heading">
+      <RouterLink class="back-button" :to="{ name: 'dashboard' }">
+        <span aria-hidden="true">←</span> {{ $t('project.backToDashboard') }}
+      </RouterLink>
 
     <p v-if="loading || !loaded" class="empty-state" role="status">{{ $t('dashboard.loading') }}</p>
     <div v-else-if="error" class="empty-state" role="alert">
@@ -49,11 +17,11 @@ onMounted(() => {
         <div>
           <p class="eyebrow">{{ $t('project.eyebrow') }}</p>
           <h1 id="project-heading">{{ project.name }}</h1>
-          <p class="page-heading__description">{{ project.description }}</p>
+          <!-- <p class="page-heading__description">{{ project.description }}</p> -->
         </div>
-        <span class="status-pill" :class="`status-pill--${project.status.toLowerCase().replace(' ', '-')}`">
-          {{ $t(`status.${project.status}`) }}
-        </span>
+        <!-- <span class="status-pill" :class="`status-pill--${project.status.toLowerCase().replace(' ', '-')}`">
+          {{ project.status }}
+        </span> -->
       </div>
 
       <section class="detail-hours-card" aria-labelledby="detail-hours-heading">
@@ -62,36 +30,34 @@ onMounted(() => {
             <p class="eyebrow">{{ $t('project.hoursOverview') }}</p>
             <h2 id="detail-hours-heading">{{ $t('project.hoursTitle') }}</h2>
           </div>
-          <span class="detail-hours-card__updated">{{ $t('project.updated', { date: project.updatedAt }) }}</span>
+          <!-- <span class="detail-hours-card__updated">{{ $t('project.updated', { date: project.updatedAt }) }}</span> -->
         </div>
 
         <HoursSummary
           class="hours-grid--detail"
           :budget="project.budget"
-          :recorded="project.recorded"
-          :remaining="remaining"
+          :recorded="project.geregistreerde_uren"
+          :remaining="project.resterende_uren"
           :budget-label="$t('hours.projectBudget')"
         />
         <div
           class="hours-progress"
           role="progressbar"
-          :aria-valuenow="Math.round(progress)"
+          :aria-valuenow="Math.round(50)"
           aria-valuemin="0"
           aria-valuemax="100"
           :aria-label="$t('hours.usedForProject', { name: project.name })"
         >
-          <span :style="{ width: `${progress}%` }"></span>
+          <span :style="{ width: `${50}%` }"></span>
         </div>
-        <p class="overview-card__caption">
-          {{ $t('hours.projectPercentUsed', { percent: Math.round(progress) }) }}
-        </p>
+        <p class="overview-card__caption">{{ $t('hours.projectPercentUsed', { percent: Math.round(50) }) }}</p>
       </section>
 
       <section class="detail-lower-grid">
-        <div class="detail-panel">
+        <!-- <div class="detail-panel">
           <p class="eyebrow">{{ $t('project.workDistribution') }}</p>
           <h2>{{ $t('project.hoursByPhase') }}</h2>
-          <ul v-if="project.phases.length" class="phase-list">
+          <ul class="phase-list">
             <li v-for="phase in project.phases" :key="phase.name" class="phase-row">
               <span>{{ phase.name }}</span>
               <span class="phase-row__track" aria-hidden="true">
@@ -100,8 +66,7 @@ onMounted(() => {
               <strong>{{ phase.hours }} {{ $t('hours.unit') }}</strong>
             </li>
           </ul>
-          <p v-else class="empty-state">{{ $t('project.noPhaseBreakdown') }}</p>
-        </div>
+        </div> -->
 
         <aside class="detail-panel detail-panel--note">
           <p class="eyebrow">{{ $t('project.projectInformation') }}</p>
@@ -110,6 +75,24 @@ onMounted(() => {
           <p class="sync-note">{{ $t('project.backendNote') }}</p>
         </aside>
       </section>
-    </template>
-  </section>
+    </section>
+    </div>
 </template>
+
+<script setup lang="ts">
+  import { useRoute, RouterLink } from 'vue-router'
+  import HoursSummary from '../components/HoursSummary.vue'
+  import { useProjectHours } from '../composables/useProjectHours'
+  import { ref, onMounted } from 'vue'
+
+  const isLoading = ref(true)
+  let project: object;
+
+  onMounted(async () => {
+    try {
+      project = await useProjectHours();
+    } finally {
+      isLoading.value = false
+    }
+  })
+</script>
