@@ -2,7 +2,7 @@
 import { toRef } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useProjectHours } from '../composables/useProjectHours'
-import type { ProjectSummary } from '../composables/projectState'
+import type { ProjectSummary } from '../types'
 
 const props = defineProps<{
   project: ProjectSummary

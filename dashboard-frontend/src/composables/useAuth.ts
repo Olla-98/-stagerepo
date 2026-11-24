@@ -15,6 +15,7 @@ function saveToken(token: string) {
   sessionStorage.setItem(tokenKey, token)
   accessToken.value = token
   sessionChecked = false
+  window.dispatchEvent(new Event('nerdboard:session-changed'))
 }
 
 function clearSession() {
@@ -22,6 +23,7 @@ function clearSession() {
   accessToken.value = null
   currentUser.value = null
   sessionChecked = true
+  window.dispatchEvent(new Event('nerdboard:session-changed'))
 }
 
 window.addEventListener('nerdboard:unauthorized', clearSession)

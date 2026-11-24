@@ -4,10 +4,12 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import DashboardNav from '../components/DashboardNav.vue'
 import { useAuth } from '../composables/useAuth'
+import { useProjects } from '../composables/useProjects'
 
 const router = useRouter()
 const { t } = useI18n()
 const { user, logout } = useAuth()
+const { clear: clearProjects } = useProjects()
 const userName = computed(() => user.value?.name ?? t('account.defaultUser'))
 const loggingOut = ref(false)
 
@@ -21,6 +23,7 @@ async function handleLogout() {
   } catch {
     await router.replace({ name: 'login', query: { error: 'logout' } })
   } finally {
+    clearProjects()
     loggingOut.value = false
   }
 }

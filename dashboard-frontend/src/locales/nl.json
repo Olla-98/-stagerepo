@@ -10,6 +10,7 @@
   "navigation": {
     "label": "Hoofdnavigatie",
     "dashboard": "Dashboard",
+    "projectDetails": "Projectdetails",
     "helpQuestion": "Vragen over je dashboard?",
     "helpContact": "Neem contact op met info{'@'}nerdsandcompany.nl."
   },
@@ -45,6 +46,11 @@
     "loading": "Projecten laden...",
     "retry": "Opnieuw proberen",
     "emptyState": "Er zijn nog geen projecten aan jouw organisatie gekoppeld."
+  },
+  "projects": {
+    "api": {
+      "error": "Projecten laden is mislukt. Probeer het opnieuw."
+    }
   },
   "login": {
     "introEyebrow": "Jouw projecten, zijn altijd zichtbaar in Nerdboard",

@@ -6,10 +6,10 @@ import { useProjectHours } from '../composables/useProjectHours'
 import { useProjects } from '../composables/useProjects'
 
 const route = useRoute()
-const { projects, loading, error, loadProjects } = useProjects()
-const project = computed(() => projects.value.find((item) => item.id === route.params.id))
+const { projects, loading, error, loadProjects, findById } = useProjects()
+const project = computed(() => typeof route.params.id === 'string' ? findById(route.params.id) : undefined)
 const projectHours = computed(() => project.value ?? { budget: 0, recorded: 0 })
-const { remaining, progress } = useProjectHours(projectHours)
+const { progress } = useProjectHours(projectHours)
 
 onMounted(() => {
   if (!projects.value.length) {
@@ -50,7 +50,7 @@ onMounted(() => {
           class="hours-grid--detail"
           :budget="project.budget"
           :recorded="project.recorded"
-          :remaining="remaining"
+          :remaining="project.remaining"
         />
         <div
           class="hours-progress"

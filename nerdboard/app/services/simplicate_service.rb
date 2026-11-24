@@ -15,7 +15,7 @@ class SimplicateService
     if @api_key.present?
       raise NotImplementedError, "Dit is geen echte implementatie van de Simplicate API. Nog geen echte API-key aanwezig."
     else
-      fake_projects.select { |project| project["organization_id"] == organization_id }
+      fake_projects.select { |project| project["organization_id"].to_s == organization_id.to_s }
     end
   end
     
