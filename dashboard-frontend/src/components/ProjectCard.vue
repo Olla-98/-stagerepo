@@ -8,7 +8,7 @@ const props = defineProps<{
   project: Project
 }>()
 
-const { remaining, progress } = useProjectHours(toRef(props, 'project'))
+// const { id, name, organization_id, budget, geregistreerde_uren, resterende_uren } = useProjectHours(toRef(props, 'project'))
 </script>
 
 <template>

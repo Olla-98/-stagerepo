@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 require "date"
 require "json"
 require "net/http"
@@ -40,10 +41,49 @@ class SimplicateService
         "name" => required_value(organization, "name").to_s
       }
     end
+=======
+require "net/http"
+
+class SimplicateService
+  PAGE_SIZE = 100
+  MIN_REQUEST_INTERVAL = 1.05
+
+  def initialize(subdomain:, api_key:, api_secret:, http: Net::HTTP, clock: -> { Process.clock_gettime(Process::CLOCK_MONOTONIC) }, sleeper: ->(seconds) { sleep(seconds) })
+      @subdomain = subdomain
+      @api_key = api_key
+      @api_secret = api_secret
+      @http = http
+      @clock = clock
+      @sleeper = sleeper
+      @last_request_at = nil
+
+      raise ConfigurationError, "Simplicate API-instellingen ontbreken." if [subdomain, api_key, api_secret].any?(&:empty?)
+  end
+
+  def organizations
+    fake_organizations
+  end
+
+  def project_for(project_id)
+    project_data = get("/projects/project/#{project_id}", "limit" => PAGE_SIZE, "offset" => 0)
+    budget = project_data["data"]["budget"]["total"]["value_budget"]
+    geregistreerde_uren = project_data["data"]["budget"]["total"]["value_spent"]
+    resterende_uren = budget - geregistreerde_uren
+
+    project = { 
+      id: project_data["data"]["id"], 
+      name: project_data["data"]["name"],
+      organization_id: project_data["data"]["organization_id"],
+      budget:,
+      geregistreerde_uren:,
+      resterende_uren:
+    }
+>>>>>>> Stashed changes
   end
 
   private
 
+<<<<<<< Updated upstream
   def validate_configuration!
     unless @subdomain&.match?(/\A[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\z/i)
       raise ConfigurationError, "SIMPLICATE_SUBDOMAIN moet het account-subdomein bevatten."
@@ -52,6 +92,58 @@ class SimplicateService
     if @api_key.blank? || @api_secret.blank?
       raise ConfigurationError, "SIMPLICATE_API_KEY en SIMPLICATE_API_SECRET moeten zijn ingesteld."
     end
+=======
+  def fetch_all(path)
+    records = []
+    offset = 0
+
+    loop do
+      response = get(path, "limit" => PAGE_SIZE, "offset" => offset)
+      page = response["data"]
+      raise SimplicateError, "Simplicate gaf geen geldige medewerkerslijst terug." unless page.is_a?(Array)
+
+      records.concat(page)
+      break if page.length < PAGE_SIZE
+
+      offset += page.length
+    end
+
+    records
+  end
+
+  def get(path, query)
+    uri = URI::HTTPS.build(
+      host: "#{@subdomain}.simplicate.nl",
+      path: "/api/v2#{path}",
+      query: URI.encode_www_form(query),
+    )
+    request = Net::HTTP::Get.new(uri)
+    request["Authentication-Key"] = @api_key
+    request["Authentication-Secret"] = @api_secret
+    request["Content-Type"] = "application/json"
+    request["Accept"] = "application/json"
+
+    response = @http.start(uri.host, uri.port, use_ssl: true, open_timeout: 5, read_timeout: 15) do |client|
+      client.request(request)
+    end
+    @last_request_at = @clock.call
+    raise SimplicateError, "Simplicate gaf HTTP-status #{response.code} terug." unless response.code.to_i.between?(200, 299)
+
+    JSON.parse(response.body)
+  rescue JSON::ParserError
+    raise SimplicateError, "Simplicate gaf een ongeldig JSON-antwoord terug."
+  rescue Net::OpenTimeout, Net::ReadTimeout, SocketError, OpenSSL::SSL::SSLError, IOError, SystemCallError => error
+    raise SimplicateError, "Simplicate is niet bereikbaar (#{error.class})."
+  end
+
+
+  def fake_organizations
+    [
+      { "id" => 999, "name" => "Testklant BV" },
+      { "id" => 111, "name" => "Sila company BV" },
+      { "id" => 222, "name" => "Aftertest BV" }
+    ]
+>>>>>>> Stashed changes
   end
 
   def fetch_all(path, filters)
