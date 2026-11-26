@@ -3,7 +3,7 @@ class SessionsController < ApplicationController
 
   def create
     email = params[:email].to_s
-    user = User.where("LOWER(email) = ?", email.downcase).first
+    user = User.find_by("LOWER(email) = LOWER(?)", email)
     unless user&.authenticate(params[:password])
       render json: { error: "Ongeldige inloggegevens" }, status: :unauthorized
       return
