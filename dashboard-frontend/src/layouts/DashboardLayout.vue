@@ -1,18 +1,28 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import DashboardNav from '../components/DashboardNav.vue'
-import { useDemoSession } from '../composables/useDemoSession'
+import { useAuth } from '../composables/useAuth'
 
 const router = useRouter()
 const { t } = useI18n()
-const { user, endDemoSession } = useDemoSession()
+const { user, logout } = useAuth()
 const userName = computed(() => user.value?.name ?? t('account.defaultUser'))
+const loggingOut = ref(false)
 
-function logout() {
-  endDemoSession()
-  return router.replace({ name: 'login' })
+async function handleLogout() {
+  if (loggingOut.value) return
+
+  loggingOut.value = true
+  try {
+    await logout()
+    await router.replace({ name: 'login' })
+  } catch {
+    await router.replace({ name: 'login', query: { error: 'logout' } })
+  } finally {
+    loggingOut.value = false
+  }
 }
 </script>
 
@@ -24,9 +34,13 @@ function logout() {
         <span>{{ $t('brand.name') }}</span>
       </RouterLink>
       <div class="topbar__account">
-        <span class="topbar__company">Gully B.V.</span>
         <span class="topbar__user">{{ userName }}</span>
-        <button class="button button--quiet button--small" type="button" @click="logout">
+        <button
+          class="button button--quiet button--small"
+          type="button"
+          :disabled="loggingOut"
+          @click="handleLogout"
+        >
           {{ $t('account.logout') }}
         </button>
       </div>
@@ -35,11 +49,6 @@ function logout() {
     <div class="dashboard-body">
       <DashboardNav />
       <main class="dashboard-main">
-        <div class="demo-notice" role="status">
-          <span>
-            <strong>{{ $t('demo.title') }}</strong> · {{ $t('demo.notice') }}
-          </span>
-        </div>
         <RouterView />
       </main>
     </div>
