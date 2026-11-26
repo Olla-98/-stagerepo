@@ -5,6 +5,8 @@ class User < ApplicationRecord
 
     before_validation :issue_api_token, on: :create
 
+    has_many :project_assignments, dependent: :destroy
+
     validates :name, presence: true
     validates :email,
       presence: true,

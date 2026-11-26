@@ -17,6 +17,12 @@ class UserTest < ActiveSupport::TestCase
     assert_operator user.api_token_expires_at, :<=, 1.hour.from_now
   end
 
+  test "does not require a Simplicate organization on the account" do
+    user = User.new(valid_attributes)
+
+    assert user.valid?
+  end
+
   test "requires a name and a valid email address" do
     user = User.new(valid_attributes.merge(name: "", email: "not-an-email"))
 

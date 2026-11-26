@@ -71,6 +71,8 @@ async function submitForm() {
         message.value = registrationErrorMessage(error)
       } else if (mode.value === 'login' && [400, 401, 422].includes(error.status)) {
         message.value = t('login.invalidCredentials')
+      } else if (error.status >= 500) {
+        message.value = t(mode.value === 'login' ? 'login.serverLoginError' : 'login.serverRegistrationError')
       } else {
         message.value = t('login.requestFailed')
       }
@@ -137,7 +139,7 @@ async function submitForm() {
           </button>
         </div>
 
-        <form id="auth-form" class="auth-form" @submit.prevent="submitForm">
+        <form id="auth-form" class="auth-form" :aria-busy="submitting" @submit.prevent="submitForm">
           <label v-if="mode === 'register'" class="field">
             <span>{{ $t('login.name') }}</span>
             <input v-model="name" autocomplete="name" name="name" :placeholder="$t('login.yourName')" required />
@@ -178,6 +180,7 @@ async function submitForm() {
         <p v-if="routeErrorMessage" class="form-message" role="alert">
           {{ routeErrorMessage }}
         </p>
+        <p class="demo-explanation">{{ $t('login.secureConnection') }}</p>
       </section>
 
       <footer class="auth-contact">
