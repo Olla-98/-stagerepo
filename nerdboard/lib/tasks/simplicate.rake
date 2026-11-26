@@ -29,4 +29,21 @@ namespace :simplicate do
     end
     abort "Simplicate API-test mislukt: #{error.message}#{hint}"
   end
+
+  desc "List project IDs and names available in the configured Simplicate organization"
+  task projects: :environment do
+    projects = SimplicateService.new.projects_for(SimplicateService.organization_id)
+    projects.each do |project|
+      puts [
+        project.fetch("id"),
+        project.fetch("name"),
+        project.fetch("status"),
+        "budget: #{project.fetch("budget")} uur",
+        "geregistreerd: #{project.fetch("recorded")} uur",
+      ].join("\t")
+    end
+    puts "Geen projecten gevonden." if projects.empty?
+  rescue SimplicateService::ConfigurationError, SimplicateService::RequestError => error
+    abort "Simplicate-projecten ophalen mislukt: #{error.message}"
+  end
 end

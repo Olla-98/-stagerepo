@@ -18,6 +18,7 @@
     "budget": "Budget",
     "recorded": "Geschreven",
     "remaining": "Resterend",
+    "projectBudget": "Urenbudget",
     "unit": "uur",
     "usedFrom": "{recorded} van {budget} uur gebruikt",
     "remainingShort": "{remaining} uur over",
@@ -40,7 +41,8 @@
     "backendNote": "Project- en urenbudgetten worden opgehaald uit Simplicate.",
     "noPhaseBreakdown": "Een uitsplitsing per fase is niet beschikbaar via de Simplicate-projectlijst.",
     "notFound": "Dit project bestaat niet of hoort niet bij jouw organisatie.",
-    "hoursUsedFor": "Uren gebruikt voor {name}"
+    "hoursUsedFor": "Uren gebruikt voor {name}",
+    "updated": "Bijgewerkt {date}"
   },
   "dashboard": {
     "eyebrow": "Projecten · Simplicate",
@@ -56,11 +58,7 @@
     "filterAll": "Alle projecten",
     "emptyState": "Er zijn geen projecten met deze status.",
     "loading": "Projecten laden…",
-    "retry": "Opnieuw proberen",
-    "projects": {
-    "api": {
-      "error": "Projecten laden is mislukt. Probeer het opnieuw."
-    }
+    "retry": "Opnieuw proberen"
   },
   "login": {
     "introEyebrow": "Jouw projecten, zijn altijd zichtbaar in Nerdboard",
@@ -95,10 +93,17 @@
     "loginSubmit": "Inloggen",
     "registerSubmit": "Account aanmaken",
     "requestFailed": "Er is iets misgegaan. Probeer het opnieuw.",
+    "serverLoginError": "Inloggen is tijdelijk niet gelukt door een probleem met de server. Probeer het later opnieuw of neem contact op met de beheerder.",
+    "serverRegistrationError": "Je account kon niet worden aangemaakt omdat de projectorganisatie tijdelijk niet bereikbaar is. Probeer het later opnieuw of neem contact op met de beheerder.",
     "connectionError": "Kan de server niet bereiken. Controleer of de backend draait en probeer het opnieuw.",
     "logoutError": "Je bent lokaal uitgelogd, maar de server kon het uitloggen niet bevestigen.",
     "secureConnection": "Je projectgegevens worden veilig via de Nerdboard-backend uit Simplicate opgehaald.",
     "requestError": "De aanvraag kon niet worden verwerkt.",
     "contact": "Hulp nodig? Je kan een bericht sturen naar info{'@'}nerdsandcompany.nl."
+  },
+  "status": {
+    "Actief": "Actief",
+    "On hold": "On hold",
+    "Afgerond": "Afgerond"
   }
 }

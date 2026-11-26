@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_06_090000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_26_090000) do
+  create_table "project_assignments", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "simplicate_project_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "simplicate_project_id"], name: "index_project_assignments_on_user_and_simplicate_project", unique: true
+    t.index ["user_id"], name: "index_project_assignments_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "api_token"
     t.datetime "created_at", null: false
@@ -23,4 +32,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_06_090000) do
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
   end
+
+  add_foreign_key "project_assignments", "users"
 end

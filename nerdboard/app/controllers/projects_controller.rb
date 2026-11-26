@@ -3,7 +3,15 @@ class ProjectsController < ApplicationController
 
   def index
     organization_id = SimplicateService.organization_id
+    unless current_user.simplicate_organization_id.to_s == organization_id
+      return render json: { error: "Dit account is niet aan de projectorganisatie gekoppeld." }, status: :forbidden
+    end
+
+    assigned_ids = current_user.project_assignments.pluck(:simplicate_project_id)
+    return render json: [], status: :ok if assigned_ids.empty?
+
     projects = SimplicateService.new.projects_for(organization_id)
+      .select { |project| assigned_ids.include?(project.fetch("id")) }
     render json: projects, status: :ok
   rescue SimplicateService::ConfigurationError => error
     Rails.logger.error("Simplicate configuration error: #{error.message}")

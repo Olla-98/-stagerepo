@@ -71,6 +71,8 @@ async function submitForm() {
         message.value = registrationErrorMessage(error)
       } else if (mode.value === 'login' && [400, 401, 422].includes(error.status)) {
         message.value = t('login.invalidCredentials')
+      } else if (error.status >= 500) {
+        message.value = t(mode.value === 'login' ? 'login.serverLoginError' : 'login.serverRegistrationError')
       } else {
         message.value = t('login.requestFailed')
       }

@@ -120,7 +120,6 @@ class SimplicateService
     {
       "id" => required_value(project, "id").to_s,
       "name" => required_value(project, "name").to_s,
-      "description" => first_value(project, "note", "description").to_s,
       "status" => normalize_status(status_label),
       "budget" => budget,
       "recorded" => recorded,

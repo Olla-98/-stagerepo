@@ -2,13 +2,13 @@
 import { toRef } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useProjectHours } from '../composables/useProjectHours'
-import type { ProjectSummary } from '../types'
+import type { Project } from '../types'
 
 const props = defineProps<{
-  project: ProjectSummary
+  project: Project
 }>()
 
-const { progress } = useProjectHours(toRef(props, 'project'))
+const { progress, remaining } = useProjectHours(toRef(props, 'project'))
 </script>
 
 <template>
@@ -16,7 +16,7 @@ const { progress } = useProjectHours(toRef(props, 'project'))
     <h3>{{ project.name }}</h3>
     <div class="project-card__hours">
       <span>{{ $t('hours.usedFrom', { recorded: project.recorded, budget: project.budget }) }}</span>
-      <span>{{ $t('hours.remainingShort', { remaining: project.remaining }) }}</span>
+      <span>{{ $t('hours.remainingShort', { remaining }) }}</span>
     </div>
     <div
       class="hours-progress hours-progress--compact"

@@ -16,7 +16,6 @@ const project = computed(() => {
 const projectForHours = computed(() => project.value ?? {
   id: '',
   name: '',
-  description: '',
   status: 'Actief' as const,
   budget: 0,
   recorded: 0,
@@ -49,7 +48,6 @@ onMounted(() => {
         <div>
           <p class="eyebrow">{{ $t('project.eyebrow') }}</p>
           <h1 id="project-heading">{{ project.name }}</h1>
-          <p class="page-heading__description">{{ project.description }}</p>
         </div>
         <span class="status-pill" :class="`status-pill--${project.status.toLowerCase().replace(' ', '-')}`">
           {{ $t(`status.${project.status}`) }}
