@@ -9,13 +9,6 @@ class SimplicateService
 
   PAGE_SIZE = 100
 
-  def self.organization_id
-    value = ENV["SIMPLICATE_ORGANIZATION_ID"]
-    raise ConfigurationError, "SIMPLICATE_ORGANIZATION_ID ontbreekt." if value.blank?
-
-    value.strip
-  end
-
   def initialize(http_client: Net::HTTP)
     @subdomain = ENV["SIMPLICATE_SUBDOMAIN"]
     @api_key = ENV["SIMPLICATE_API_KEY"]
@@ -25,19 +18,18 @@ class SimplicateService
     validate_configuration!
   end
 
-  def projects_for(organization_id)
-    organization_id = (organization_id.presence || self.class.organization_id).to_s
-
-    fetch_all("/projects/project", "q[organization.id]" => organization_id)
-      .select { |project| organization_id_for(project) == organization_id }
-      .map { |project| normalize_project(project) }
+  def projects_for
+    fetch_all("/projects/project", {}).map { |project| normalize_project(project) }
   end
 
   def organizations
     fetch_all("/crm/organization", {}).map do |organization|
+      id = first_value(organization, "id")
+      raise RequestError, "Simplicate-organisatie mist het verplichte veld id." if id.blank?
+
       {
-        "id" => required_value(organization, "id").to_s,
-        "name" => required_value(organization, "name").to_s
+        "id" => id.to_s,
+        "name" => first_value(organization, "name").presence || "Naam niet beschikbaar"
       }
     end
   end
@@ -105,11 +97,6 @@ class SimplicateService
     raise RequestError, "Simplicate gaf een ongeldig JSON-antwoord terug."
   rescue Net::OpenTimeout, Net::ReadTimeout, SocketError, OpenSSL::SSL::SSLError, IOError, SystemCallError => error
     raise RequestError, "Simplicate is niet bereikbaar (#{error.class})."
-  end
-
-  def organization_id_for(project)
-    value = first_value(project, "organization.id", "organization_id")
-    value&.to_s
   end
 
   def normalize_project(project)

@@ -23,20 +23,21 @@ server; the Vue frontend only receives the project data returned by Rails.
    cp .env.example .env
    ```
 
-4. From the `nerdboard` directory, install dependencies and test the API while
-   listing organizations visible to the API token:
+4. From the `nerdboard` directory, install dependencies and check the API
+   account. The first command lists customer organizations visible to the
+   Nerds & Company API user; the second lists accessible projects and hour
+   summaries across those organizations:
 
    ```sh
    bundle install
    bin/rails simplicate:organizations
+   bin/rails simplicate:projects
    ```
 
-   A successful test prints `Verbinding gelukt` followed by organization IDs
-   and names. Copy the ID for the client organization whose projects should
-   appear into `SIMPLICATE_ORGANIZATION_ID` in `.env`. It is the ID printed next
-   to that organization, not a Nerdboard user ID. If this command only prints
-   an error and exits, use the message below to troubleshoot; the command does
-   not open a terminal prompt.
+   The API credentials identify the Nerds & Company Simplicate account. They
+   stay on the backend and are not customer login credentials. Customer access
+   is granted separately by assigning Simplicate project IDs to a Nerdboard
+   user; do not configure one customer organization globally in `.env`.
 5. Prepare the database and start the API:
 
    ```sh
@@ -55,22 +56,28 @@ server; the Vue frontend only receives the project data returned by Rails.
    backend host, set `VITE_API_BASE_URL` for the frontend; never set the
    Simplicate key or secret as a `VITE_` variable.
 
-The Simplicate subdomain identifies the Simplicate account that owns the API
-token and contains the projects. The organization ID identifies a client
-organization within that account. The API token inherits the permissions of
-the Simplicate user who created it, so that user must have access to the
-organizations and projects. If each customer instead owns a separate
-Simplicate account, this single-account setup is not sufficient; each tenant
-would need its own credentials and account mapping.
+The Simplicate subdomain identifies the Nerds & Company account that owns the
+API token. The token inherits the permissions of the Simplicate user who
+created it, so that user must be allowed to read the client organizations and
+projects that customers may view. Customers do not need Simplicate accounts.
+Nerds & Company staff link each dashboard user to only that user's approved
+project IDs. If each customer instead owns a separate Simplicate account, that
+would require a different multi-account integration.
 
 Set `FRONTEND_ORIGINS` to a comma-separated list of allowed frontend origins
 when the frontend is hosted on another origin. It defaults to
 `http://localhost:5173`.
 
-The API reads projects from Simplicate and filters them by the configured
-organization ID. Project budget and spent hours come from the project's
-`budget.hours.amount` fields. The detailed phase breakdown is not available
-from the project-list endpoint and is therefore not fabricated.
+The API reads projects live from the configured Simplicate account and returns
+only the project IDs assigned to the authenticated Nerdboard user. The
+database stores these access assignments, not copied project details. New
+accounts see no projects until Nerds & Company staff assign them. Assign only
+projects the account owner is allowed to see. Project budget and spent hours
+come from Simplicate; notes, costs, MRR, invoice details and individual
+internal corrections are not included in the API response. The displayed
+spent-hours total is the aggregate Simplicate provides. The detailed phase
+breakdown is not available from the project-list endpoint and is therefore
+not fabricated.
 
 Run backend tests with `bin/rails test`.
 
@@ -92,7 +99,8 @@ Run backend tests with `bin/rails test`.
    ```
 
    This is the first connection test. It should print the API URL, `Verbinding
-   gelukt`, then organization IDs and names. Set the desired ID in `.env`.
+   gelukt`, then organization IDs and names. Use the project list to find
+   project IDs that staff can assign to dashboard users.
 3. Still in Terminal 1:
 
    ```sh
@@ -108,8 +116,26 @@ Run backend tests with `bin/rails test`.
    ```
 
    Open the Vite URL shown in Terminal 2. Register a dashboard account or log
-   in. The dashboard should show projects from the configured organization.
-5. To verify the protected project API directly, log in through the app and
+   in. New accounts initially see no projects.
+5. From the backend directory, list project IDs and hour summaries visible to
+   the configured Simplicate API user:
+
+   ```sh
+   bin/rails simplicate:projects
+   ```
+
+   Assign only approved project IDs to each user in the Rails console:
+
+   ```ruby
+   user = User.find_by!(email: "customer@example.com")
+   user.project_assignments.find_or_create_by!(simplicate_project_id: "project:...")
+   ```
+
+   A Simplicate contact person record alone does not grant Nerdboard access.
+   Staff must create or identify the matching Nerdboard account and assign
+   that customer's approved project IDs. Repeat for each allowed project; a
+   different customer contact gets their own assignments.
+6. To verify the protected project API directly, log in through the app and
    inspect the browser's **Developer Tools → Network → `projects`** request.
    It should return HTTP `200` and a JSON array. Do not copy or share the
    `Authorization` header or any API credentials.

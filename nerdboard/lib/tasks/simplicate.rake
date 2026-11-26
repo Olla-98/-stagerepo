@@ -30,9 +30,9 @@ namespace :simplicate do
     abort "Simplicate API-test mislukt: #{error.message}#{hint}"
   end
 
-  desc "List project IDs and names available in the configured Simplicate organization"
+  desc "List project IDs and hour summaries available to the configured Simplicate API user"
   task projects: :environment do
-    projects = SimplicateService.new.projects_for(SimplicateService.organization_id)
+    projects = SimplicateService.new.projects_for
     projects.each do |project|
       puts [
         project.fetch("id"),

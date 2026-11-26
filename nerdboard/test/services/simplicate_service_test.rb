@@ -3,7 +3,7 @@ require "test_helper"
 class SimplicateServiceTest < ActiveSupport::TestCase
   Response = Struct.new(:code, :body)
 
-  test "requests and normalizes projects for the configured organization" do
+  test "requests and normalizes projects across organizations visible to the API user" do
     response = Response.new("200", {
       data: [
         {
@@ -23,14 +23,13 @@ class SimplicateServiceTest < ActiveSupport::TestCase
     client, request = http_client(response)
 
     with_configuration do
-      projects = SimplicateService.new(http_client: client).projects_for(nil)
+      projects = SimplicateService.new(http_client: client).projects_for
 
-      assert_equal 1, projects.length
+      assert_equal [ "project-1", "project-2" ], projects.map { |project| project.fetch("id") }
       assert_equal(
         {
           "id" => "project-1",
           "name" => "Website",
-          "description" => "Website updates",
           "status" => "Actief",
           "budget" => 80.0,
           "recorded" => 24.5,
@@ -43,7 +42,7 @@ class SimplicateServiceTest < ActiveSupport::TestCase
       assert_equal "private-key", http_request["Authentication-Key"]
       assert_equal "private-secret", http_request["Authentication-Secret"]
       assert_equal "application/json", http_request["Content-Type"]
-      assert_equal "org-42", URI.decode_www_form(http_request.uri.query).to_h["q[organization.id]"]
+      assert_nil URI.decode_www_form(http_request.uri.query).to_h["q[organization.id]"]
     end
   end
 
@@ -52,7 +51,7 @@ class SimplicateServiceTest < ActiveSupport::TestCase
 
     with_configuration do
       error = assert_raises(SimplicateService::RequestError) do
-        SimplicateService.new(http_client: client).projects_for("org-42")
+        SimplicateService.new(http_client: client).projects_for
       end
 
       assert_equal "Simplicate gaf HTTP-status 401 terug.", error.message
@@ -61,15 +60,21 @@ class SimplicateServiceTest < ActiveSupport::TestCase
 
   test "lists organizations with their Simplicate IDs" do
     response = Response.new("200", {
-      data: [ { id: "org-42", name: "Klant BV" } ],
-      metadata: { count: 1 }
+      data: [
+        { id: "org-42", name: "Klant BV" },
+        { id: "org-43", name: nil }
+      ],
+      metadata: { count: 2 }
     }.to_json)
     client, request = http_client(response)
 
     with_configuration do
       organizations = SimplicateService.new(http_client: client).organizations
 
-      assert_equal [ { "id" => "org-42", "name" => "Klant BV" } ], organizations
+      assert_equal [
+        { "id" => "org-42", "name" => "Klant BV" },
+        { "id" => "org-43", "name" => "Naam niet beschikbaar" }
+      ], organizations
       assert_equal "nerds.simplicate.nl", request.call.uri.host
       assert_equal "/api/v2/crm/organization", request.call.uri.path
     end
@@ -92,12 +97,11 @@ class SimplicateServiceTest < ActiveSupport::TestCase
   end
 
   def with_configuration
-    original = %w[SIMPLICATE_SUBDOMAIN SIMPLICATE_API_KEY SIMPLICATE_API_SECRET SIMPLICATE_ORGANIZATION_ID]
+    original = %w[SIMPLICATE_SUBDOMAIN SIMPLICATE_API_KEY SIMPLICATE_API_SECRET]
       .to_h { |key| [ key, ENV[key] ] }
     ENV["SIMPLICATE_SUBDOMAIN"] = "nerds"
     ENV["SIMPLICATE_API_KEY"] = "private-key"
     ENV["SIMPLICATE_API_SECRET"] = "private-secret"
-    ENV["SIMPLICATE_ORGANIZATION_ID"] = "org-42"
     yield
   ensure
     original.each { |key, value| value.nil? ? ENV.delete(key) : ENV[key] = value }

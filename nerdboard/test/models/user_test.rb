@@ -5,8 +5,7 @@ class UserTest < ActiveSupport::TestCase
     {
       name: "Test User",
       email: "new-user@example.com",
-      password: "secure-password",
-      simplicate_organization_id: "org-42"
+      password: "secure-password"
     }
   end
 
@@ -16,6 +15,12 @@ class UserTest < ActiveSupport::TestCase
     assert user.api_token.present?
     assert_operator user.api_token_expires_at, :>, Time.current
     assert_operator user.api_token_expires_at, :<=, 1.hour.from_now
+  end
+
+  test "does not require a Simplicate organization on the account" do
+    user = User.new(valid_attributes)
+
+    assert user.valid?
   end
 
   test "requires a name and a valid email address" do
