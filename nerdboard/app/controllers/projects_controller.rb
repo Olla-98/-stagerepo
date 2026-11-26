@@ -8,6 +8,15 @@ class ProjectsController < ApplicationController
         end
 
         projects = SimplicateService.new.projects_for(@current_user.simplicate_organization_id)
+        projects = projects.map do |project|
+            {
+                id: project["id"],
+                name: project["name"],
+                budget: project["budget"],
+                recorded: project["geregistreerde_uren"],
+                remaining: project["resterende_uren"]
+            }
+        end
         render json: projects, status: :ok
     end
 end

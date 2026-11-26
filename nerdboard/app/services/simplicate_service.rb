@@ -15,7 +15,7 @@ class SimplicateService
     if @api_key.present?
       raise NotImplementedError, "Dit is geen echte implementatie van de Simplicate API. Nog geen echte API-key aanwezig."
     else
-      fake_projects.select { |project| project["organization_id"] == organization_id }
+      fake_projects.select { |project| project["organization_id"].to_s == organization_id.to_s }
     end
   end
     
@@ -31,10 +31,10 @@ class SimplicateService
 
   def fake_projects
     [
-      { "id" => "1", "name" => "Website ontwikkeling en onderhoud", "organization_id" => 999, "budget" => 1000, "geregistreerde_uren" => 10, "resterende_uren" => 20 },
-      { "id" => "2", "name" => "Webshop Sima", "organization_id" => 999, "budget" => 5000, "geregistreerde_uren" => 20, "resterende_uren" => 30 },
-      { "id" => "3", "name" => "Project 3", "organization_id" => 111, "budget" => 2000, "geregistreerde_uren" => 5, "resterende_uren" => 15 },
-      { "id" => "4", "name" => "Project 4", "organization_id" => 222, "budget" => 3000, "geregistreerde_uren" => 8, "resterende_uren" => 12 }
+      { "id" => "1", "name" => "Website ontwikkeling en onderhoud", "organization_id" => 999, "budget" => 1000, "geregistreerde_uren" => 10, "resterende_uren" => 990 },
+      { "id" => "2", "name" => "Webshop Sima", "organization_id" => 999, "budget" => 5000, "geregistreerde_uren" => 20, "resterende_uren" => 4980 },
+      { "id" => "3", "name" => "Project 3", "organization_id" => 111, "budget" => 2000, "geregistreerde_uren" => 5, "resterende_uren" => 1995 },
+      { "id" => "4", "name" => "Project 4", "organization_id" => 222, "budget" => 3000, "geregistreerde_uren" => 8, "resterende_uren" => 2992 }
 
     ]
   end
