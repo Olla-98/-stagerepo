@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "dotenv/load"
+require "fileutils"
+require "optparse"
+require_relative "../lib/weekly_hours_reminder"
+
+ENV["TZ"] = ENV.fetch("TIMEZONE", "Europe/Amsterdam")
+
+options = {}
+OptionParser.new do |parser|
+  parser.banner = "Usage: bundle exec ruby bin/send_weekly_reminders [--week-start YYYY-MM-DD]"
+  parser.on("--week-start DATE", "Check the week starting on this Monday") { |date| options[:week_start] = Date.iso8601(date) }
+end.parse!
+
+week_start = options[:week_start] || WeeklyHoursReminder.previous_week_start
+raise ArgumentError, "--week-start must be a Monday." unless week_start.monday?
+
+client = WeeklyHoursReminder::SimplicateClient.new(
+  subdomain: ENV.fetch("SIMPLICATE_SUBDOMAIN", ""),
+  api_key: ENV.fetch("SIMPLICATE_API_KEY", ""),
+  api_secret: ENV.fetch("SIMPLICATE_API_SECRET", ""),
+)
+
+store = WeeklyHoursReminder::DeliveryStore.new(ENV.fetch("DATABASE_PATH", "var/reminders.sqlite3"))
+send_reminders = ENV.fetch("SEND_REMINDERS", "false") == "true"
+employee_ids = ENV.fetch("REMINDER_EMPLOYEE_IDS", "").split(",").map(&:strip).reject(&:empty?)
+
+mailer = if send_reminders
+  WeeklyHoursReminder::Mailer.new(
+    from: ENV.fetch("REMINDER_FROM", ""),
+    smtp_address: ENV.fetch("SMTP_ADDRESS", ""),
+    smtp_port: Integer(ENV.fetch("SMTP_PORT", "587")),
+    username: ENV.fetch("SMTP_USERNAME", ""),
+    password: ENV.fetch("SMTP_PASSWORD", ""),
+    authentication: ENV.fetch("SMTP_AUTHENTICATION", "plain"),
+    starttls: ENV.fetch("SMTP_STARTTLS", "true") == "true",
+  )
+end
+
+begin
+  WeeklyHoursReminder::Runner.new(
+    client: client,
+    store: store,
+    mailer: mailer,
+    send_reminders: send_reminders,
+    employee_ids: employee_ids,
+  ).run(week_start: week_start)
+ensure
+  store.close
+end
